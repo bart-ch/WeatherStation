@@ -18,13 +18,7 @@ import java.util.ResourceBundle;
 public class MainWindowController implements Initializable {
 
     @FXML
-    private TextField currentCountryTextField;
-
-    @FXML
     private TextField currentCityTextField;
-
-    @FXML
-    private TextField desiredCountryTextField;
 
     @FXML
     private TextField desiredCityTextField;
@@ -41,24 +35,25 @@ public class MainWindowController implements Initializable {
     @FXML
     private Label currentDateForDesiredCityLabel;
 
+    @FXML
+    private Label currentTempForCurrentCity;
+
     private ControllerFunctions controllerFunctions;
 
     @FXML
-    void currentCityButtonAction(ActionEvent event) {
+    void currentCityButtonAction() {
+
     }
 
     @FXML
-    void currentCountryButtonAction(ActionEvent event) {
-        String currentCountry = currentCountryTextField.getText();
-
+    void desiredCityButtonAction() {
     }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-            controllerFunctions = new ControllerFunctions(currentCountryTextField, currentCityTextField,
-                    desiredCountryTextField,
-                    desiredCityTextField);
 
-             Platform.runLater(() -> currentCityTextField.requestFocus());
+            controllerFunctions = new ControllerFunctions(currentCityTextField, desiredCityTextField);
+            Platform.runLater(() -> currentCityTextField.requestFocus());
     }
 }
 

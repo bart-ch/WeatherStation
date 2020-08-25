@@ -11,30 +11,28 @@ import java.util.List;
  */
 public class ControllerFunctions {
 
-    private TextField currentCountry;
     private TextField currentCity;
-    private TextField desiredCountry;
     private TextField desiredCity;
     private List<City> citiesList;
     private HashMap<String, String> citiesNamesWithCountryCodes;
 
-    public ControllerFunctions(TextField currentCountry, TextField currentCity, TextField desiredCountry, TextField desiredCity) {
-        this.currentCountry = currentCountry;
+    public ControllerFunctions(TextField currentCity,TextField desiredCity) {
+
         this.currentCity = currentCity;
-        this.desiredCountry = desiredCountry;
         this.desiredCity = desiredCity;
 
         try {
             citiesList = new CityProvider().getCityList();
             citiesNamesWithCountryCodes = new HashMap<String, String>();
             int iterator = 0;
-            for(int i = 0; i<citiesList.size(); i++) {
+            for(int i = 0; i < citiesList.size(); i++) {
                 String countryCode = citiesList.get(i).getCountryCode();
                 String city = citiesList.get(i).getCityName();
                 citiesNamesWithCountryCodes.put(city,city + ", " + countryCode);
             }
 
             TextFields.bindAutoCompletion(currentCity, citiesNamesWithCountryCodes.values());
+            TextFields.bindAutoCompletion(desiredCity, citiesNamesWithCountryCodes.values());
 
         } catch (Exception e) {
             e.printStackTrace();
