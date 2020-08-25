@@ -2,7 +2,6 @@ package weatherStation.model;
 
 import javafx.scene.control.TextField;
 import org.controlsfx.control.textfield.TextFields;
-import org.w3c.dom.Text;
 
 import java.util.HashMap;
 import java.util.List;

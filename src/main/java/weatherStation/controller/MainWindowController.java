@@ -1,6 +1,7 @@
 package weatherStation.controller;
 
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -43,21 +44,21 @@ public class MainWindowController implements Initializable {
     private ControllerFunctions controllerFunctions;
 
     @FXML
-    void currentCityButtonAction() {
+    void currentCityButtonAction(ActionEvent event) {
     }
 
     @FXML
-    void currentCountryButtonAction() {
+    void currentCountryButtonAction(ActionEvent event) {
         String currentCountry = currentCountryTextField.getText();
 
     }
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-         //   controllerFunctions = new ControllerFunctions(currentCountryTextField, currentCityTextField,
-          //          desiredCountryTextField,
-            //        desiredCityTextField);
+            controllerFunctions = new ControllerFunctions(currentCountryTextField, currentCityTextField,
+                    desiredCountryTextField,
+                    desiredCityTextField);
 
-        //     Platform.runLater(() -> currentCountry.requestFocus());
+             Platform.runLater(() -> currentCityTextField.requestFocus());
     }
 }
 
