@@ -6,24 +6,24 @@ package weatherStation.model;
 public class City {
 
     private int id;
+    private String name;
     private String country;
-    private String city;
 
-    public City(int id, String country, String city) {
+    public City(int id, String name, String country) {
         this.id = id;
+        this.name = name;
         this.country = country;
-        this.city = city;
     }
 
-    public int getId() {
+    public int getCityId() {
         return id;
     }
 
-    public String getCountry() {
-        return country;
+    public String getCityName() {
+        return name;
     }
 
-    public String getCity() {
-        return city;
+    public String getCountryCode() {
+        return country;
     }
 }

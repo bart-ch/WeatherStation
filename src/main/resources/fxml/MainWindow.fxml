@@ -45,9 +45,9 @@
                               <Font size="14.0" />
                           </font>
                       </Label>
-                      <TextField fx:id="currentCountry" prefHeight="11.0" prefWidth="198.0" promptText="Kraj" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+                      <TextField fx:id="currentCountryTextField" prefHeight="11.0" prefWidth="198.0" promptText="Kraj" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
                       <Button alignment="CENTER" onAction="#currentCountryButtonAction" text="OK" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
-                      <TextField fx:id="currentCity" promptText="Miasto" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+                      <TextField fx:id="currentCityTextField" promptText="Miasto" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
                       <Button alignment="CENTER" onAction="#currentCityButtonAction" text="OK" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
                   </children>
               </GridPane>
@@ -76,9 +76,9 @@
                               <Font size="14.0" />
                           </font>
                       </Label>
-                      <TextField fx:id="desiredCountry" promptText="Kraj" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+                      <TextField fx:id="desiredCountryTextField" promptText="Kraj" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
                       <Button alignment="CENTER" text="OK" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
-                      <TextField fx:id="desiredCity" promptText="Miasto" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+                      <TextField fx:id="desiredCityTextField" promptText="Miasto" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
                       <Button alignment="CENTER" text="OK" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
                   </children>
               </GridPane>
