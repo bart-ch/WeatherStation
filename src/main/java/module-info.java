@@ -8,5 +8,6 @@
 
     opens weatherStation;
     opens weatherStation.controller;
+    opens weatherStation.model;
 
 }
