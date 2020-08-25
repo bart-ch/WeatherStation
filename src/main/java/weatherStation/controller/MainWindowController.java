@@ -1,6 +1,7 @@
 package weatherStation.controller;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
 /**
@@ -22,6 +23,18 @@ public class MainWindowController {
     private TextField desiredCity;
 
     @FXML
+    private Label currentCityLabel;
+
+    @FXML
+    private Label currentDateForCurrentCityLabel;
+
+    @FXML
+    private Label desiredCityLabel;
+
+    @FXML
+    private Label currentDateForDesiredCityLabel;
+
+    @FXML
     void currentCityButtonAction() {
 
     }
@@ -30,5 +43,6 @@ public class MainWindowController {
     void currentCountryButtonAction() {
 
     }
+
 }
 

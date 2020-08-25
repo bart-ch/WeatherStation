@@ -8,6 +8,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
@@ -97,7 +98,8 @@
                   <VBox alignment="TOP_CENTER" prefHeight="420.0" prefWidth="482.0">
                      <children>
                         <Label fx:id="currentCityLabel" prefHeight="26.0" prefWidth="3.0" />
-                        <Label fx:id="currentDateLabel" prefHeight="26.0" prefWidth="8.0" />
+                        <Label fx:id="currentDateForCurrentCityLabel" prefHeight="26.0" prefWidth="8.0" />
+                        <HBox prefHeight="100.0" prefWidth="200.0" />
                      </children>
                   </VBox>
                </children>
@@ -114,7 +116,13 @@
                   <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                </rowConstraints>
                <children>
-                  <VBox prefHeight="200.0" prefWidth="100.0" />
+                  <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0">
+                     <children>
+                        <Label fx:id="desiredCityLabel" prefHeight="26.0" prefWidth="3.0" />
+                        <Label fx:id="currentDateForDesiredCityLabel" prefHeight="26.0" prefWidth="8.0" />
+                        <HBox prefHeight="100.0" prefWidth="200.0" />
+                     </children>
+                  </VBox>
                </children>
             </GridPane>
          </content>
