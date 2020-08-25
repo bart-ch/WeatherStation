@@ -5,6 +5,8 @@
     requires javafx.controls;
     requires javafx.graphics;
     requires javafx.web;
+    requires com.google.gson;
+    requires org.controlsfx.controls;
 
     opens weatherStation;
     opens weatherStation.controller;
