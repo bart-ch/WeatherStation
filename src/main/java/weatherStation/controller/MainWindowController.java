@@ -36,17 +36,20 @@ public class MainWindowController implements Initializable {
     private Label currentDateForDesiredCityLabel;
 
     @FXML
-    private Label currentTempForCurrentCity;
+    private Label currentTempForCurrentCityLabel;
 
     private ControllerFunctions controllerFunctions;
 
     @FXML
     void currentCityButtonAction() {
+       controllerFunctions.loadWeatherForCurrentDay(currentCityTextField,currentCityLabel,
+               currentTempForCurrentCityLabel);
 
     }
 
     @FXML
     void desiredCityButtonAction() {
+        //controllerFunctions.loadWeatherForCurrentDay(desiredCityTextField,desiredCityLabel);
     }
 
     @Override

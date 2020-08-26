@@ -1,6 +1,8 @@
 package weatherStation.model;
 
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import net.aksingh.owmjapis.api.APIException;
 import org.controlsfx.control.textfield.TextFields;
 
 import java.util.HashMap;
@@ -37,5 +39,47 @@ public class ControllerFunctions {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void loadWeatherForCurrentDay(TextField enteredCity, Label cityName,
+                                         Label currentTempForCurrentCity) {
+        String userCity = enteredCity.getText();
+        int userCityId = getCityId(userCity);
+
+        try {
+            if (userCityId <= 0) {
+                throw new Exception();
+            } else{
+                WeatherProvider todaysWeather = new WeatherProvider(userCityId);
+                cityName.setText(todaysWeather.getCityName() + ", " + todaysWeather.getCountryCode());
+                //date
+
+                currentTempForCurrentCity.setText(todaysWeather.getCurrentTemperature() + "C");
+            }
+
+        } catch (APIException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            cityName.setText("Wpisano miasto o błędnym ID.");
+        }
+    }
+
+    private int getCityId(String userCity) {
+        int cityId = 0;
+        int iterator = 0;
+
+        String[] splittedArray = null;
+        splittedArray = userCity.split(",");
+        userCity = splittedArray[0];
+
+        if (citiesNamesWithCountryCodes.containsKey(userCity)) {
+            for (City i : citiesList) {
+                if (citiesList.get(iterator).getCityName().equals(userCity)) {
+                    cityId = citiesList.get(iterator).getCityId();
+                }
+                iterator++;
+            }
+        }
+        return cityId;
     }
 }

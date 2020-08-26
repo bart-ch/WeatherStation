@@ -63,14 +63,20 @@
                <children>
                   <VBox alignment="TOP_CENTER" prefHeight="420.0" prefWidth="482.0">
                      <children>
-                        <Label fx:id="currentCityLabel" prefHeight="26.0" prefWidth="3.0" />
+                        <Label fx:id="currentCityLabel" text="Proszę wpisać miasto, aby wyświetlić prognozę pogody." textAlignment="CENTER">
+                           <font>
+                              <Font size="14.0" />
+                           </font></Label>
                         <Label fx:id="currentDateForCurrentCityLabel" prefHeight="26.0" prefWidth="8.0" />
                         <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
                            <children>
-                              <Label fx:id="currentTempForCurrentCity">
+                              <Label fx:id="currentTempForCurrentCityLabel">
                                  <font>
                                     <Font size="21.0" />
                                  </font>
+                                 <padding>
+                                    <Insets left="15.0" />
+                                 </padding>
                               </Label>
                            </children></HBox>
                      </children>
@@ -91,7 +97,11 @@
                <children>
                   <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0">
                      <children>
-                        <Label fx:id="desiredCityLabel" prefHeight="26.0" prefWidth="3.0" />
+                        <Label fx:id="desiredCityLabel" text="Proszę wpisać miasto, aby wyświetlić prognozę pogody." textAlignment="CENTER">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
                         <Label fx:id="currentDateForDesiredCityLabel" prefHeight="26.0" prefWidth="8.0" />
                         <HBox prefHeight="100.0" prefWidth="200.0" />
                      </children>
