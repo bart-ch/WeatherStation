@@ -67,7 +67,7 @@
                            <font>
                               <Font size="14.0" />
                            </font></Label>
-                        <Label fx:id="currentDateForCurrentCityLabel" prefHeight="26.0" prefWidth="8.0" />
+                        <Label fx:id="currentDateForCurrentCityLabel" />
                         <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
                            <children>
                               <Label fx:id="currentTempForCurrentCityLabel">

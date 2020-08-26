@@ -12,6 +12,7 @@ import weatherStation.Config;
 public class WeatherProvider {
 
     private OWM owm = new OWM(new Config().getAPI_KEY());
+    private DateConverter dateConverter = new DateConverter();
     private CurrentWeather currentWeather;
     private HourlyWeatherForecast hourlyWeatherForecast;
 
@@ -51,6 +52,15 @@ public class WeatherProvider {
 
     public String getCountryCode() {
         return (hourlyWeatherForecast.hasCityData()) ? hourlyWeatherForecast.getCityData().getCountryCode() : null;
+    }
+
+    public String getCurrentDate() {
+        if(currentWeather.hasDateTime()) {
+            String currentDate = currentWeather.getDateTime().toString();
+            String polishCurrentDate = dateConverter.convertDateToPolish(currentDate);
+            return polishCurrentDate;
+        }
+        return null;
     }
 
 }

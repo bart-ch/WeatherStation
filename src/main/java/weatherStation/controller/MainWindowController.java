@@ -43,7 +43,7 @@ public class MainWindowController implements Initializable {
     @FXML
     void currentCityButtonAction() {
        controllerFunctions.loadWeatherForCurrentDay(currentCityTextField,currentCityLabel,
-               currentTempForCurrentCityLabel);
+               currentTempForCurrentCityLabel, currentDateForCurrentCityLabel);
 
     }
 
