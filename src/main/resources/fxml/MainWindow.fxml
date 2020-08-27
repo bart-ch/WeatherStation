@@ -84,7 +84,7 @@
                                     </Label>
                                  </children>
                               </VBox>
-                              <ImageView fx:id="currentWeatherIconForCurrentCity" fitHeight="150.0" fitWidth="138.0" pickOnBounds="true" preserveRatio="true" />
+                              <ImageView fx:id="currentWeatherIconForCurrentCity" fitHeight="88.0" fitWidth="107.0" pickOnBounds="true" preserveRatio="true" />
                               <VBox alignment="CENTER_LEFT" prefHeight="150.0" prefWidth="238.0">
                                  <children>
                                     <Label fx:id="currentPressureForCurrentCity" />

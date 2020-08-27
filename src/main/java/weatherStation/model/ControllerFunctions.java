@@ -3,6 +3,8 @@ package weatherStation.model;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import net.aksingh.owmjapis.api.APIException;
@@ -51,7 +53,7 @@ public class ControllerFunctions {
     public void loadWeatherForCurrentDay(TextField enteredCity, Label cityName,
                                          Label currentTempForCurrentCity, Label currentDate, Label currentCityNow,
                                          Label currentPressure, Label currentHumidity,
-                                         HBox currentDayNextHoursWeather) {
+                                         HBox currentDayNextHoursWeather, ImageView currentWeatherIcon) {
         String userCity = enteredCity.getText();
         int userCityId = getCityId(userCity);
 
@@ -68,6 +70,9 @@ public class ControllerFunctions {
                 currentPressure.setText("Ciśnienie: " + weather.getCurrentPressure());
                 currentHumidity.setText("Wilgotność: " + weather.getCurrentHumidity());
 
+                String pathCurrentIconLeft = weather.getCurrentWeatherIcon();
+                currentWeatherIcon.setImage(setIcon(pathCurrentIconLeft));
+
                 Vector<Integer> hourIndexes = forecastHours.getIndex(weather, "today");
                 Vector<Integer> hourIndexesNextDays = forecastHours.getIndex(weather, "nextDay");
 
@@ -82,11 +87,14 @@ public class ControllerFunctions {
             cityName.setText("Wpisano miasto o błędnym ID.");
         }
     }
+    private Image setIcon(String path) {
+        return new Image(path);
+    }
 
     private void loadWeatherForCurrentDayForNextHours(HBox currentDayNextHoursWeather, Vector<Integer> hourIndexes, WeatherProvider weather) {
         List<VBox> containerForHourData = new ArrayList<>();
         List<Label> selectedHoursForCurrentDay = new ArrayList<>();
-     //   List<ImageView> hourlyIconForCurrentDay = new ArrayList<>();
+        List<ImageView> hourlyIconForCurrentDay = new ArrayList<>();
         List<Label> hourlyTemperatureForCurrentDay = new ArrayList<>();
         List<Label> hourlyHumidityForCurrentDay = new ArrayList<>();
 
@@ -105,14 +113,22 @@ public class ControllerFunctions {
             Label hourlyHumidityForCurrentDayLabel = new Label();
             hourlyHumidityForCurrentDay.add(hourlyHumidityForCurrentDayLabel);
 
-            hourWeatherData.getChildren().addAll(currentDayHour, hourlyTemperatureForCurrentDayLabel, hourlyHumidityForCurrentDayLabel);
+            ImageView currentTimeWeatherIcon = new ImageView();
+            hourlyIconForCurrentDay.add(currentTimeWeatherIcon);
+            String pathDayIcon = weather.getHourlyWeatherIcon(hourIndexes.get(i));
+            currentTimeWeatherIcon.setImage(setIcon(pathDayIcon));
+
+            hourWeatherData.getChildren().addAll(currentDayHour, hourlyTemperatureForCurrentDayLabel,
+                    hourlyHumidityForCurrentDayLabel, currentTimeWeatherIcon);
             currentDayNextHoursWeather.getChildren().add(hourWeatherData);
 
             currentDayHour.setText(weather.getHourlyDateTime(hourIndexes.get(i)).substring(11, 16));
           //  String pathFirstDayIcon = weather.getHourlyIcon(hourIndexes.get(i));
           //  hourlyIconForCurrentDayImage.setImage(setIcon(pathFirstDayIcon));
             hourlyTemperatureForCurrentDayLabel.setText(weather.getHourlyTemperature(hourIndexes.get(i)));
-         //   hourlyHumidityForCurrentDayLabel.setText(weather.getHourlyHumidity(hourIndexes.get(i)) + "%");
+            hourlyHumidityForCurrentDayLabel.setText(weather.getHourlyHumidity(hourIndexes.get(i)));
+
+
         }
     }
 

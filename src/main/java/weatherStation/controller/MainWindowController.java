@@ -61,7 +61,7 @@ public class MainWindowController implements Initializable {
     void currentCityButtonAction() {
        controllerFunctions.loadWeatherForCurrentDay(currentCityTextField,currentCityLabel,
                currentTempForCurrentCityLabel, currentDateForCurrentCityLabel, currentCityNowLabel,
-               currentPressureForCurrentCity, currentHumidityForCurrentCity, currentCityCurrentDayNextHoursWeather);
+               currentPressureForCurrentCity, currentHumidityForCurrentCity, currentCityCurrentDayNextHoursWeather, currentWeatherIconForCurrentCity);
 
     }
 

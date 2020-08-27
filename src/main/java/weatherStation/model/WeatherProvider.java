@@ -106,7 +106,42 @@ public class WeatherProvider {
 
     public String getHourlyTemperature(int hourIndex) {
         if(getHourlyWeatherData(hourIndex).getMainData().hasTemp()) {
-            return roundTemperature(getHourlyWeatherData(hourIndex).getMainData().getTemp()) + degreeSymbol + " C";
+            return roundTemperature(getHourlyWeatherData(hourIndex).getMainData().getTemp()) + degreeSymbol + "C";
+        }
+        return null;
+    }
+
+    public String getHourlyHumidity(int hourIndex) {
+        if(getHourlyWeatherData(hourIndex).getMainData().hasHumidity()) {
+            return roundTemperature(getHourlyWeatherData(hourIndex).getMainData().getHumidity()) + " %";
+        }
+        return null;
+    }
+
+    public String getCurrentWeatherIcon() {
+        Weather currentWeatherData = getCurrentWeatherList().get(0);
+        if (currentWeatherData.hasIconLink())
+            return currentWeatherData.getIconLink();
+        else return null;
+    }
+
+    public List<Weather> getCurrentWeatherList() {
+        if (currentWeather.hasWeatherList())
+            return currentWeather.getWeatherList();
+        else return null;
+    }
+
+    public List<Weather> getHourlyWeatherList(int hourIndex) {
+        if(getHourlyWeatherData(hourIndex).hasWeatherList()) {
+           return getHourlyWeatherData(hourIndex).getWeatherList();
+        }
+        return null;
+    }
+
+    public String getHourlyWeatherIcon(int hourIndex)  {
+        Weather hourlyWeatherData = getHourlyWeatherList(hourIndex).get(0);
+        if (hourlyWeatherData.hasIconLink()) {
+            return hourlyWeatherData.getIconLink();
         }
         return null;
     }
