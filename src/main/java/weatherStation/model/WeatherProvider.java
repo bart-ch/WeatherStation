@@ -4,7 +4,11 @@ import net.aksingh.owmjapis.api.APIException;
 import net.aksingh.owmjapis.core.OWM;
 import net.aksingh.owmjapis.model.CurrentWeather;
 import net.aksingh.owmjapis.model.HourlyWeatherForecast;
+import net.aksingh.owmjapis.model.param.Weather;
+import net.aksingh.owmjapis.model.param.WeatherData;
 import weatherStation.Config;
+
+import java.util.List;
 
 /**
  * Created by "Bartosz Chodyla" on 2020-08-24.
@@ -48,7 +52,6 @@ public class WeatherProvider {
         return Math.round(temp * 10.0) /10.0;
     }
 
-
     public String getCurrentPressure() {
         if(currentWeather.getMainData().hasPressure()) {
             return Math.round(currentWeather.getMainData().getPressure()) + " hPa";
@@ -78,6 +81,21 @@ public class WeatherProvider {
             return polishCurrentDate;
         }
         return null;
+    }
+
+    public List<WeatherData> getHourlyWeatherDataList() {
+        return (hourlyWeatherForecast.hasDataList()) ? hourlyWeatherForecast.getDataList() : null;
+    }
+    public WeatherData getHourlyWeatherData(int hourIndex) {
+        return getHourlyWeatherDataList().get(hourIndex);
+    }
+
+    public List<Weather> getWeatherListByHours(int hourIndex) {
+        if(getHourlyWeatherData(hourIndex).hasWeatherList()) {
+           return getHourlyWeatherData(hourIndex).getWeatherList();
+        }
+        return null;
+
     }
 
 }

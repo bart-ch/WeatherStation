@@ -7,6 +7,7 @@ import org.controlsfx.control.textfield.TextFields;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Vector;
 
 /**
  * Created by "Bartosz Chodyla" on 2020-08-25.
@@ -18,6 +19,7 @@ public class ControllerFunctions {
 
     private List<City> citiesList;
     private HashMap<String, String> citiesNamesWithCountryCodes;
+    private ForecastHours forecastHours = new ForecastHours();
 
     public ControllerFunctions(TextField currentCity,TextField desiredCity) {
 
@@ -52,14 +54,17 @@ public class ControllerFunctions {
             if (userCityId <= 0) {
                 throw new Exception();
             } else{
-                WeatherProvider todaysWeather = new WeatherProvider(userCityId);
-                cityName.setText(todaysWeather.getCityName() + ", " + todaysWeather.getCountryCode());
-                currentDate.setText(todaysWeather.getCurrentDate());
+                WeatherProvider weather = new WeatherProvider(userCityId);
+                cityName.setText(weather.getCityName() + ", " + weather.getCountryCode());
+                currentDate.setText(weather.getCurrentDate());
 
                 currentCityNow.setText("Teraz:");
-                currentTempForCurrentCity.setText(todaysWeather.getCurrentTemperature());
-                currentPressure.setText(todaysWeather.getCurrentPressure());
-                currentHumidity.setText(todaysWeather.getCurrentHumidity());
+                currentTempForCurrentCity.setText(weather.getCurrentTemperature());
+                currentPressure.setText("Ciśnienie: " + weather.getCurrentPressure());
+                currentHumidity.setText("Wilgotność: " + weather.getCurrentHumidity());
+
+                Vector<Integer> hourIndexes = forecastHours.getIndex(weather, "today");
+                Vector<Integer> hourIndexesNextDays = forecastHours.getIndex(weather, "nextDay");
 
             }
 
