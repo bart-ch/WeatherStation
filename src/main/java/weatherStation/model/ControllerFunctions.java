@@ -15,7 +15,7 @@ public class ControllerFunctions {
 
     private TextField currentCity;
     private TextField desiredCity;
-    private final String degreeSymbol = "\u00B0";
+
     private List<City> citiesList;
     private HashMap<String, String> citiesNamesWithCountryCodes;
 
@@ -43,7 +43,8 @@ public class ControllerFunctions {
     }
 
     public void loadWeatherForCurrentDay(TextField enteredCity, Label cityName,
-                                         Label currentTempForCurrentCity, Label currentDate) {
+                                         Label currentTempForCurrentCity, Label currentDate, Label currentCityNow,
+                                         Label currentPressure, Label currentHumidity) {
         String userCity = enteredCity.getText();
         int userCityId = getCityId(userCity);
 
@@ -53,10 +54,13 @@ public class ControllerFunctions {
             } else{
                 WeatherProvider todaysWeather = new WeatherProvider(userCityId);
                 cityName.setText(todaysWeather.getCityName() + ", " + todaysWeather.getCountryCode());
-                //date
-
-                currentTempForCurrentCity.setText(todaysWeather.getCurrentTemperature() + degreeSymbol + "C");
                 currentDate.setText(todaysWeather.getCurrentDate());
+
+                currentCityNow.setText("Teraz:");
+                currentTempForCurrentCity.setText(todaysWeather.getCurrentTemperature());
+                currentPressure.setText(todaysWeather.getCurrentPressure());
+                currentHumidity.setText(todaysWeather.getCurrentHumidity());
+
             }
 
         } catch (APIException e) {

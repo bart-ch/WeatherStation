@@ -15,6 +15,7 @@ public class WeatherProvider {
     private DateConverter dateConverter = new DateConverter();
     private CurrentWeather currentWeather;
     private HourlyWeatherForecast hourlyWeatherForecast;
+    private final String degreeSymbol = "\u00B0";
 
     public WeatherProvider(int id) throws APIException {
         owm.setUnit(OWM.Unit.METRIC);
@@ -36,15 +37,31 @@ public class WeatherProvider {
     }
 
 
-    public Double getCurrentTemperature() {
-        return (currentWeather.getMainData().hasTemp()) ? roundTemperature(currentWeather.getMainData().getTemp()) :
-                null;
+    public String getCurrentTemperature() {
+        if(currentWeather.getMainData().hasTemp()) {
+           return roundTemperature(currentWeather.getMainData().getTemp()) + degreeSymbol + "C";
+        }
+        return null;
     }
 
     private Double roundTemperature(Double temp) {
         return Math.round(temp * 10.0) /10.0;
     }
 
+
+    public String getCurrentPressure() {
+        if(currentWeather.getMainData().hasPressure()) {
+            return Math.round(currentWeather.getMainData().getPressure()) + " hPa";
+        }
+        return null;
+    }
+
+    public String getCurrentHumidity() {
+        if(currentWeather.getMainData().hasHumidity()) {
+            return Math.round(currentWeather.getMainData().getHumidity()) + " %";
+        }
+        return null;
+    }
 
     public String getCityName() {
         return (currentWeather.hasCityName()) ? currentWeather.getCityName() : null;

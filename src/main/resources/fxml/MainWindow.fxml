@@ -6,6 +6,7 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
@@ -65,19 +66,34 @@
                      <children>
                         <Label fx:id="currentCityLabel" text="Proszę wpisać miasto, aby wyświetlić prognozę pogody." textAlignment="CENTER">
                            <font>
+                              <Font size="16.0" />
+                           </font></Label>
+                        <Label fx:id="currentDateForCurrentCityLabel">
+                           <font>
                               <Font size="14.0" />
                            </font></Label>
-                        <Label fx:id="currentDateForCurrentCityLabel" />
                         <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
                            <children>
-                              <Label fx:id="currentTempForCurrentCityLabel">
-                                 <font>
-                                    <Font size="21.0" />
-                                 </font>
+                              <VBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="154.0">
+                                 <children>
+                                    <Label fx:id="currentCityNowLabel" />
+                                    <Label fx:id="currentTempForCurrentCityLabel" contentDisplay="CENTER">
+                                       <font>
+                                          <Font size="37.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
                                  <padding>
-                                    <Insets left="15.0" />
+                                    <Insets left="30.0" />
                                  </padding>
-                              </Label>
+                              </VBox>
+                              <ImageView fx:id="currentWeatherIconForCurrentCity" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" />
+                              <VBox prefHeight="200.0" prefWidth="100.0">
+                                 <children>
+                                    <Label fx:id="currentPressureForCurrentCity" />
+                                    <Label fx:id="currentHumidityForCurrentCity" />
+                                 </children>
+                              </VBox>
                            </children></HBox>
                      </children>
                   </VBox>
@@ -99,7 +115,7 @@
                      <children>
                         <Label fx:id="desiredCityLabel" text="Proszę wpisać miasto, aby wyświetlić prognozę pogody." textAlignment="CENTER">
                            <font>
-                              <Font size="14.0" />
+                              <Font size="16.0" />
                            </font>
                         </Label>
                         <Label fx:id="currentDateForDesiredCityLabel" prefHeight="26.0" prefWidth="8.0" />
