@@ -89,6 +89,12 @@ public class WeatherProvider {
     public WeatherData getHourlyWeatherData(int hourIndex) {
         return getHourlyWeatherDataList().get(hourIndex);
     }
+    public String getHourlyDateTime(int hourIndex) {
+        if(getHourlyWeatherData(hourIndex).hasDateTime()) {
+            return getHourlyWeatherData(hourIndex).getDateTime().toString();
+        }
+        return null;
+    }
 
     public List<Weather> getWeatherListByHours(int hourIndex) {
         if(getHourlyWeatherData(hourIndex).hasWeatherList()) {
@@ -98,4 +104,10 @@ public class WeatherProvider {
 
     }
 
+    public String getHourlyTemperature(int hourIndex) {
+        if(getHourlyWeatherData(hourIndex).getMainData().hasTemp()) {
+            return roundTemperature(getHourlyWeatherData(hourIndex).getMainData().getTemp()) + degreeSymbol + " C";
+        }
+        return null;
+    }
 }

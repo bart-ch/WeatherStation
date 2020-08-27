@@ -7,6 +7,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import weatherStation.model.ControllerFunctions;
 
 import java.net.URL;
@@ -51,13 +52,16 @@ public class MainWindowController implements Initializable {
     @FXML
     private TextField desiredCityTextField;
 
+    @FXML
+    private HBox currentCityCurrentDayNextHoursWeather;
+
     private ControllerFunctions controllerFunctions;
 
     @FXML
     void currentCityButtonAction() {
        controllerFunctions.loadWeatherForCurrentDay(currentCityTextField,currentCityLabel,
                currentTempForCurrentCityLabel, currentDateForCurrentCityLabel, currentCityNowLabel,
-               currentPressureForCurrentCity, currentHumidityForCurrentCity);
+               currentPressureForCurrentCity, currentHumidityForCurrentCity, currentCityCurrentDayNextHoursWeather);
 
     }
 

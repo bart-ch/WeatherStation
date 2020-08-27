@@ -1,10 +1,14 @@
 package weatherStation.model;
 
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import net.aksingh.owmjapis.api.APIException;
 import org.controlsfx.control.textfield.TextFields;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Vector;
@@ -29,7 +33,7 @@ public class ControllerFunctions {
         try {
             citiesList = new CityProvider().getCityList();
             citiesNamesWithCountryCodes = new HashMap<String, String>();
-            int iterator = 0;
+
             for(int i = 0; i < citiesList.size(); i++) {
                 String countryCode = citiesList.get(i).getCountryCode();
                 String city = citiesList.get(i).getCityName();
@@ -46,7 +50,8 @@ public class ControllerFunctions {
 
     public void loadWeatherForCurrentDay(TextField enteredCity, Label cityName,
                                          Label currentTempForCurrentCity, Label currentDate, Label currentCityNow,
-                                         Label currentPressure, Label currentHumidity) {
+                                         Label currentPressure, Label currentHumidity,
+                                         HBox currentDayNextHoursWeather) {
         String userCity = enteredCity.getText();
         int userCityId = getCityId(userCity);
 
@@ -66,12 +71,48 @@ public class ControllerFunctions {
                 Vector<Integer> hourIndexes = forecastHours.getIndex(weather, "today");
                 Vector<Integer> hourIndexesNextDays = forecastHours.getIndex(weather, "nextDay");
 
+                loadWeatherForCurrentDayForNextHours(currentDayNextHoursWeather, hourIndexes, weather);
+               // loadHoursDataForNextDays(nextDaysData, hourIndexesNextDays, weather);
+
             }
 
         } catch (APIException e) {
             e.printStackTrace();
         } catch (Exception e) {
             cityName.setText("Wpisano miasto o błędnym ID.");
+        }
+    }
+
+    private void loadWeatherForCurrentDayForNextHours(HBox currentDayNextHoursWeather, Vector<Integer> hourIndexes, WeatherProvider weather) {
+        List<VBox> containerForHourData = new ArrayList<>();
+        List<Label> selectedHoursForCurrentDay = new ArrayList<>();
+     //   List<ImageView> hourlyIconForCurrentDay = new ArrayList<>();
+        List<Label> hourlyTemperatureForCurrentDay = new ArrayList<>();
+        List<Label> hourlyHumidityForCurrentDay = new ArrayList<>();
+
+        for (int i = 0; i < hourIndexes.size(); i++) {
+            VBox hourWeatherData = new VBox();
+            hourWeatherData.setAlignment(Pos.CENTER);
+            hourWeatherData.setPrefWidth(110);
+            containerForHourData.add(hourWeatherData);
+
+            Label currentDayHour = new Label();
+            selectedHoursForCurrentDay.add(currentDayHour);
+
+            Label hourlyTemperatureForCurrentDayLabel = new Label();
+            hourlyTemperatureForCurrentDay.add(hourlyTemperatureForCurrentDayLabel);
+
+            Label hourlyHumidityForCurrentDayLabel = new Label();
+            hourlyHumidityForCurrentDay.add(hourlyHumidityForCurrentDayLabel);
+
+            hourWeatherData.getChildren().addAll(currentDayHour, hourlyTemperatureForCurrentDayLabel, hourlyHumidityForCurrentDayLabel);
+            currentDayNextHoursWeather.getChildren().add(hourWeatherData);
+
+            currentDayHour.setText(weather.getHourlyDateTime(hourIndexes.get(i)).substring(11, 16));
+          //  String pathFirstDayIcon = weather.getHourlyIcon(hourIndexes.get(i));
+          //  hourlyIconForCurrentDayImage.setImage(setIcon(pathFirstDayIcon));
+            hourlyTemperatureForCurrentDayLabel.setText(weather.getHourlyTemperature(hourIndexes.get(i)));
+         //   hourlyHumidityForCurrentDayLabel.setText(weather.getHourlyHumidity(hourIndexes.get(i)) + "%");
         }
     }
 
