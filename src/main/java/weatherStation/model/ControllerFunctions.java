@@ -2,9 +2,11 @@ package weatherStation.model;
 
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
+import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import net.aksingh.owmjapis.api.APIException;
@@ -50,10 +52,11 @@ public class ControllerFunctions {
         }
     }
 
-    public void loadWeatherForCurrentDay(TextField enteredCity, Label cityName,
-                                         Label currentTempForCurrentCity, Label currentDate, Label currentCityNow,
-                                         Label currentPressure, Label currentHumidity,
-                                         HBox currentDayNextHoursWeather, ImageView currentWeatherIcon) {
+    public void loadWeather(TextField enteredCity, Label cityName,
+                            Label currentTempForCurrentCity, Label currentDate, Label currentCityNow,
+                            Label currentPressure, Label currentHumidity,
+                            HBox currentDayNextHoursWeather, ImageView currentWeatherIcon,
+                            GridPane weatherForNextDays ) {
         String userCity = enteredCity.getText();
         int userCityId = getCityId(userCity);
 
@@ -77,8 +80,7 @@ public class ControllerFunctions {
                 Vector<Integer> hourIndexesNextDays = forecastHours.getIndex(weather, "nextDay");
 
                 loadWeatherForCurrentDayForNextHours(currentDayNextHoursWeather, hourIndexes, weather);
-               // loadHoursDataForNextDays(nextDaysData, hourIndexesNextDays, weather);
-
+                loadHoursDataForNextDays(weatherForNextDays, hourIndexesNextDays, weather);
             }
 
         } catch (APIException e) {
@@ -118,16 +120,93 @@ public class ControllerFunctions {
             String pathDayIcon = weather.getHourlyWeatherIcon(hourIndexes.get(i));
             currentTimeWeatherIcon.setImage(setIcon(pathDayIcon));
 
+
+            Separator separator = new Separator();
+            separator.setOpacity(0.5);
+            separator.prefWidth(200.0);
+
             hourWeatherData.getChildren().addAll(currentDayHour, hourlyTemperatureForCurrentDayLabel,
-                    hourlyHumidityForCurrentDayLabel, currentTimeWeatherIcon);
+                    hourlyHumidityForCurrentDayLabel, currentTimeWeatherIcon, separator);
             currentDayNextHoursWeather.getChildren().add(hourWeatherData);
 
             currentDayHour.setText(weather.getHourlyDateTime(hourIndexes.get(i)).substring(11, 16));
-          //  String pathFirstDayIcon = weather.getHourlyIcon(hourIndexes.get(i));
-          //  hourlyIconForCurrentDayImage.setImage(setIcon(pathFirstDayIcon));
             hourlyTemperatureForCurrentDayLabel.setText(weather.getHourlyTemperature(hourIndexes.get(i)));
             hourlyHumidityForCurrentDayLabel.setText(weather.getHourlyHumidity(hourIndexes.get(i)));
+        }
+    }
 
+    private void loadHoursDataForNextDays(GridPane currentCityNextDaysWeather, Vector<Integer> hourIndexes,
+                                          WeatherProvider weather) {
+        List<VBox> nextDays = new ArrayList<>();
+        List<Label> nextDaysDate = new ArrayList<>();
+        List<HBox> oneDayDataList = new ArrayList<>();
+        List<VBox> hoursData = new ArrayList<>();
+        List<Label> selectedHours = new ArrayList<>();
+        List<ImageView> hourlyIcons = new ArrayList<>();
+        List<Label> hourlyTemperatureData = new ArrayList<>();
+        List<Label> hourlyHumidityData = new ArrayList<>();
+        List<Separator> separators = new ArrayList<>();
+
+        int index = 1;
+
+        for (int i = 1; i <= 4; i++) {
+
+            VBox nextDay = new VBox();
+            nextDay.setAlignment(Pos.CENTER);
+            nextDay.setSpacing(5);
+            nextDays.add(nextDay);
+
+            Label nextDayDate = new Label();
+            nextDaysDate.add(nextDayDate);
+
+            HBox oneDayData = new HBox();
+            oneDayData.setAlignment(Pos.CENTER);
+            oneDayDataList.add(oneDayData);
+
+            for (int j = 0; j < 4; j++) {
+                VBox hourData = new VBox();
+                hourData.setAlignment(Pos.CENTER);
+                hourData.setPrefWidth(110);
+                hourData.setSpacing(5);
+                hoursData.add(hourData);
+
+                Label selectedHour = new Label();
+                selectedHours.add(selectedHour);
+
+                ImageView hourlyIcon = new ImageView();
+                hourlyIcons.add(hourlyIcon);
+
+                Label hourlyTemperature = new Label();
+                hourlyTemperatureData.add(hourlyTemperature);
+
+                Label hourlyHumidity = new Label();
+                hourlyHumidityData.add(hourlyHumidity);
+
+                Separator separator = new Separator();
+                separator.setOpacity(0.5);
+                separator.prefWidth(200.0);
+                separators.add(separator);
+
+                hourData.getChildren().addAll(selectedHour, hourlyIcon, hourlyTemperature, hourlyHumidity, separator);
+                oneDayData.getChildren().add(hourData);
+
+                if (j == 0) {
+                    String date = DateConverter.convertDateToPolish(weather.getHourlyDateTime(hourIndexes.get(0)));
+                    nextDayDate.setText(date);
+                }
+
+                selectedHour.setText(weather.getHourlyDateTime(hourIndexes.get(0)).substring(11, 16));
+                String pathDayIcon = weather.getHourlyWeatherIcon(hourIndexes.get(0));
+                hourlyIcon.setImage(setIcon(pathDayIcon));
+                hourlyTemperature.setText(weather.getHourlyTemperature(hourIndexes.get(0)));
+                hourlyHumidity.setText(weather.getHourlyHumidity(hourIndexes.get(0)));
+                hourIndexes.remove(0);
+            }
+            nextDay.getChildren().add(nextDayDate);
+            nextDay.getChildren().add(oneDayData);
+            currentCityNextDaysWeather.add(nextDay, 0, index);
+            currentCityNextDaysWeather.setAlignment(Pos.CENTER);
+            index++;
 
         }
     }

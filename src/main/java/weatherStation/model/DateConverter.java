@@ -5,7 +5,7 @@ package weatherStation.model;
  */
 public class DateConverter {
 
-    public String convertDateToPolish(String date) {
+    public static String convertDateToPolish(String date) {
         String dayName = date.substring(0,3);
         String convertedDayName = convertDateDayName(dayName);
         String monthName = date.substring(4,7);
@@ -21,7 +21,7 @@ public class DateConverter {
         return convertedDate;
     }
 
-    private String convertDateDayName(String day) {
+    private static String convertDateDayName(String day) {
         switch (day) {
             case "Mon":
                 return "Poniedziałek";
@@ -41,7 +41,7 @@ public class DateConverter {
         return null;
     }
 
-    private String convertDateMonthName(String month) {
+    private static String convertDateMonthName(String month) {
         switch(month) {
             case "Jan":
                 return "stycznia";

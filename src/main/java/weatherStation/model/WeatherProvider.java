@@ -16,7 +16,6 @@ import java.util.List;
 public class WeatherProvider {
 
     private OWM owm = new OWM(new Config().getAPI_KEY());
-    private DateConverter dateConverter = new DateConverter();
     private CurrentWeather currentWeather;
     private HourlyWeatherForecast hourlyWeatherForecast;
     private final String degreeSymbol = "\u00B0";
@@ -77,7 +76,7 @@ public class WeatherProvider {
     public String getCurrentDate() {
         if(currentWeather.hasDateTime()) {
             String currentDate = currentWeather.getDateTime().toString();
-            String polishCurrentDate = dateConverter.convertDateToPolish(currentDate);
+            String polishCurrentDate = DateConverter.convertDateToPolish(currentDate);
             return polishCurrentDate;
         }
         return null;
@@ -113,7 +112,7 @@ public class WeatherProvider {
 
     public String getHourlyHumidity(int hourIndex) {
         if(getHourlyWeatherData(hourIndex).getMainData().hasHumidity()) {
-            return roundTemperature(getHourlyWeatherData(hourIndex).getMainData().getHumidity()) + " %";
+            return Math.round(getHourlyWeatherData(hourIndex).getMainData().getHumidity()) + " %";
         }
         return null;
     }
