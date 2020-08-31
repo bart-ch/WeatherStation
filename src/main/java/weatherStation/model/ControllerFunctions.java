@@ -107,38 +107,38 @@ public class ControllerFunctions {
         double currentHour = Double.parseDouble(currentDateTime.substring(11, 13) + "." + currentDateTime.substring(14,
                 16) + currentDateTime.substring(17, 19));
 
-        String conditionImage = "";
+        String conditionImage;
 
         if ((currentHour > sunriseHour) && (currentHour < sunsetHour)) {
             if ((conditionId >= 200) && (conditionId <= 232)) {
-                conditionImage = "/img/thunderstorm.jpg";
+                conditionImage = "/img/thunderstorm_day.jpg";
             } else if ((conditionId >= 300) && (conditionId <= 531)) {
                 conditionImage = "/img/rain_day.jpg";
             } else if ((conditionId >= 600) && (conditionId <= 622)) {
-                conditionImage = "/img/snow.jpg";
+                conditionImage = "/img/snow_day.jpg";
             } else if ((conditionId >= 701) && (conditionId <= 781)) {
-                conditionImage = "/img/mist.jpg";
+                conditionImage = "/img/fog_day.jpg";
             } else if ((conditionId >= 801) && (conditionId <= 804)) {
-                conditionImage = "/img/clouds.jpg";
+                conditionImage = "/img/clouds_day.jpg";
             } else if ((conditionId == 800)) {
                 conditionImage = "/img/sun.jpg";
             } else conditionImage =  "";
         } else {
             if ((conditionId >= 200) && (conditionId <= 232)) {
-                conditionImage =  "/img/thunderstorm_n.jpg";
+                conditionImage =  "/img/thunderstorm_night.jpg";
             } else if ((conditionId >= 300) && (conditionId <= 531)) {
                 conditionImage = "/img/rain_night.jpg";
             } else if ((conditionId >= 600) && (conditionId <= 622)) {
-                conditionImage = "/img/snow_n.jpg";
+                conditionImage = "/img/snow_night.jpg";
             } else if ((conditionId >= 701) && (conditionId <= 781)) {
-                conditionImage = "/img/mist.jpg";
+                conditionImage = "/img/fog_night.jpg";
             } else if ((conditionId >= 801) && (conditionId <= 804)) {
-                conditionImage = "/img/clouds_n.jpg";
+                conditionImage = "/img/clouds_night.jpg";
             } else if ((conditionId == 800)) {
                 conditionImage =  "/img/moon.jpg";
             } else conditionImage = "";
         }
-
+        
         return ControllerFunctions.class.getResource(conditionImage).toExternalForm();
     }
 
@@ -173,11 +173,8 @@ public class ControllerFunctions {
             String pathDayIcon = weather.getHourlyWeatherIcon(hourIndexes.get(i));
             currentTimeWeatherIcon.setImage(setIcon(pathDayIcon));
 
-            Separator separator = new Separator();
-            separator.prefWidth(200.0);
-
             hourWeatherData.getChildren().addAll(currentDayHour, hourlyTemperatureForCurrentDayLabel,
-                    hourlyHumidityForCurrentDayLabel, currentTimeWeatherIcon, separator);
+                    hourlyHumidityForCurrentDayLabel, currentTimeWeatherIcon);
             currentDayNextHoursWeather.getChildren().add(hourWeatherData);
 
             currentDayHour.setText(weather.getHourlyDateTime(hourIndexes.get(i)).substring(11, 16));
