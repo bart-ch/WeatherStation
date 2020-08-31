@@ -77,7 +77,7 @@
                            <children>
                               <VBox alignment="CENTER_LEFT" prefHeight="150.0" prefWidth="238.0">
                                  <children>
-                                    <Label fx:id="currentCityNowLabel" textFill="WHITE">
+                                    <Label fx:id="currentCityNowLabel" styleClass="label-text" stylesheets="@../css/style.css" textFill="WHITE">
                                        <font>
                                           <Font size="14.0" />
                                        </font></Label>

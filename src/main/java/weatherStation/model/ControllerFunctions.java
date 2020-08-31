@@ -57,6 +57,10 @@ public class ControllerFunctions {
                             Label currentPressure, Label currentHumidity,
                             HBox currentDayNextHoursWeather, ImageView currentWeatherIcon,
                             GridPane weatherForNextDays, GridPane weatherBackground ) {
+
+        deletePreviousWeatherData(cityName, currentTempForCurrentCity, currentDate, currentCityNow,
+                currentPressure, currentHumidity, currentDayNextHoursWeather, currentWeatherIcon, weatherForNextDays, weatherBackground);
+
         String userCity = enteredCity.getText();
         int userCityId = getCityId(userCity);
 
@@ -69,7 +73,6 @@ public class ControllerFunctions {
                 currentDate.setText(weather.getCurrentDate());
 
                 currentCityNow.setText("Teraz:");
-                currentCityNow.setStyle("-fx-effect: dropshadow(two-pass-box, #000, 1, 1, 1, 1)");
                 currentTempForCurrentCity.setText(weather.getCurrentTemperature());
                 currentPressure.setText("Ciśnienie: " + weather.getCurrentPressure());
                 currentHumidity.setText("Wilgotność: " + weather.getCurrentHumidity());
@@ -97,9 +100,25 @@ public class ControllerFunctions {
             e.printStackTrace();
         }
     }
+    private void deletePreviousWeatherData(Label cityName,
+    Label currentTempForCurrentCity, Label currentDate, Label currentCityNow,
+    Label currentPressure, Label currentHumidity,
+    HBox currentDayNextHoursWeather, ImageView currentWeatherIcon,
+    GridPane weatherForNextDays, GridPane weatherBackground ) {
+        cityName.setText(null);
+        currentTempForCurrentCity.setText(null);
+        currentDate.setText(null);
+        currentCityNow.setText(null);
+        currentPressure.setText(null);
+        currentHumidity.setText(null);
+        currentDayNextHoursWeather.getChildren().clear();
+        currentWeatherIcon.setImage(null);
+        weatherForNextDays.getChildren().clear();
+        weatherBackground.setStyle(null);
+    }
 
-    private static String getUrlOfBackgroundImage(int conditionId, String currentDateTime, String sunriseDateTime,
-                                             String sunsetDateTime) {
+
+    private static String getUrlOfBackgroundImage(int conditionId, String currentDateTime, String sunriseDateTime, String sunsetDateTime) {
 
         double sunriseHour = Double.parseDouble(sunriseDateTime.substring(11, 13) + "." + sunriseDateTime.substring(14,
                 16) + sunriseDateTime.substring(17, 19));
@@ -180,8 +199,14 @@ public class ControllerFunctions {
             currentDayNextHoursWeather.getChildren().add(hourWeatherData);
 
             currentDayHour.setText(weather.getHourlyDateTime(hourIndexes.get(i)).substring(11, 16));
+            currentDayHour.getStyleClass().add("label-text");
+
             hourlyTemperatureForCurrentDayLabel.setText(weather.getHourlyTemperature(hourIndexes.get(i)));
+            hourlyTemperatureForCurrentDayLabel.getStyleClass().add("label-text");
+
             hourlyHumidityForCurrentDayLabel.setText(weather.getHourlyHumidity(hourIndexes.get(i)));
+            hourlyHumidityForCurrentDayLabel.getStyleClass().add("label-text");
+
         }
     }
 
@@ -243,13 +268,22 @@ public class ControllerFunctions {
                 if (j == 0) {
                     String date = DateConverter.convertDateToPolish(weather.getHourlyDateTime(hourIndexes.get(0)));
                     nextDayDate.setText(date);
+                    nextDayDate.getStyleClass().add("label-text");
+                    nextDayDate.setStyle("-fx-font: 14 System");
                 }
 
                 selectedHour.setText(weather.getHourlyDateTime(hourIndexes.get(0)).substring(11, 16));
+                selectedHour.getStyleClass().add("label-text");
+
                 String pathDayIcon = weather.getHourlyWeatherIcon(hourIndexes.get(0));
                 hourlyIcon.setImage(setIcon(pathDayIcon));
+
                 hourlyTemperature.setText(weather.getHourlyTemperature(hourIndexes.get(0)));
+                hourlyTemperature.getStyleClass().add("label-text");
+
                 hourlyHumidity.setText(weather.getHourlyHumidity(hourIndexes.get(0)));
+                hourlyHumidity.getStyleClass().add("label-text");
+
                 hourIndexes.remove(0);
             }
             nextDay.getChildren().add(nextDayDate);
