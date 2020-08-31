@@ -69,6 +69,7 @@ public class ControllerFunctions {
                 currentDate.setText(weather.getCurrentDate());
 
                 currentCityNow.setText("Teraz:");
+                currentCityNow.setStyle("-fx-effect: dropshadow(two-pass-box, #000, 1, 1, 1, 1)");
                 currentTempForCurrentCity.setText(weather.getCurrentTemperature());
                 currentPressure.setText("Ciśnienie: " + weather.getCurrentPressure());
                 currentHumidity.setText("Wilgotność: " + weather.getCurrentHumidity());
@@ -173,8 +174,9 @@ public class ControllerFunctions {
             String pathDayIcon = weather.getHourlyWeatherIcon(hourIndexes.get(i));
             currentTimeWeatherIcon.setImage(setIcon(pathDayIcon));
 
-            hourWeatherData.getChildren().addAll(currentDayHour, hourlyTemperatureForCurrentDayLabel,
-                    hourlyHumidityForCurrentDayLabel, currentTimeWeatherIcon);
+            hourWeatherData.getChildren().addAll(currentDayHour,currentTimeWeatherIcon,
+                    hourlyTemperatureForCurrentDayLabel,
+                    hourlyHumidityForCurrentDayLabel);
             currentDayNextHoursWeather.getChildren().add(hourWeatherData);
 
             currentDayHour.setText(weather.getHourlyDateTime(hourIndexes.get(i)).substring(11, 16));
