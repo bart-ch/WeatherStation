@@ -138,7 +138,7 @@ public class ControllerFunctions {
                 conditionImage =  "/img/moon.jpg";
             } else conditionImage = "";
         }
-        
+
         return ControllerFunctions.class.getResource(conditionImage).toExternalForm();
     }
 
