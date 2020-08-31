@@ -82,6 +82,20 @@ public class WeatherProvider {
         return null;
     }
 
+    public String getCurrentDateTime() {
+        return (currentWeather.hasDateTime()) ? currentWeather.getDateTime().toString() : null;
+    }
+
+    public String getSunsetDateTime() {
+        return (currentWeather.getSystemData().hasSunsetDateTime()) ? currentWeather.getSystemData().getSunsetDateTime().toString() :
+                null;
+    }
+
+    public String getSunriseDateTime() {
+        return (currentWeather.getSystemData().hasSunriseDateTime()) ? currentWeather.getSystemData().getSunriseDateTime().toString() :
+                null;
+    }
+
     public List<WeatherData> getHourlyWeatherDataList() {
         return (hourlyWeatherForecast.hasDataList()) ? hourlyWeatherForecast.getDataList() : null;
     }
@@ -135,6 +149,11 @@ public class WeatherProvider {
            return getHourlyWeatherData(hourIndex).getWeatherList();
         }
         return null;
+    }
+
+    public int getCurrentCondition() {
+        Weather currentWeatherData = getCurrentWeatherList().get(0);
+        return (currentWeatherData.hasConditionId()) ? currentWeatherData.getConditionId(): null;
     }
 
     public String getHourlyWeatherIcon(int hourIndex)  {

@@ -56,7 +56,7 @@ public class ControllerFunctions {
                             Label currentTempForCurrentCity, Label currentDate, Label currentCityNow,
                             Label currentPressure, Label currentHumidity,
                             HBox currentDayNextHoursWeather, ImageView currentWeatherIcon,
-                            GridPane weatherForNextDays ) {
+                            GridPane weatherForNextDays, GridPane weatherBackground ) {
         String userCity = enteredCity.getText();
         int userCityId = getCityId(userCity);
 
@@ -76,6 +76,12 @@ public class ControllerFunctions {
                 String pathCurrentIconLeft = weather.getCurrentWeatherIcon();
                 currentWeatherIcon.setImage(setIcon(pathCurrentIconLeft));
 
+                String imageURL = getUrlOfBackgroundImage(weather.getCurrentCondition(),
+                        weather.getCurrentDateTime(), weather.getSunriseDateTime(),
+                        weather.getSunsetDateTime());
+                weatherBackground.setStyle("-fx-background-image: url('" + imageURL + "'); -fx-background-position: center; " +
+                        "-fx-background-size: cover;");
+
                 Vector<Integer> hourIndexes = forecastHours.getIndex(weather, "today");
                 Vector<Integer> hourIndexesNextDays = forecastHours.getIndex(weather, "nextDay");
 
@@ -87,8 +93,55 @@ public class ControllerFunctions {
             e.printStackTrace();
         } catch (Exception e) {
             cityName.setText("Wpisano miasto o błędnym ID.");
+            e.printStackTrace();
         }
     }
+
+    private static String getUrlOfBackgroundImage(int conditionId, String currentDateTime, String sunriseDateTime,
+                                             String sunsetDateTime) {
+
+        double sunriseHour = Double.parseDouble(sunriseDateTime.substring(11, 13) + "." + sunriseDateTime.substring(14,
+                16) + sunriseDateTime.substring(17, 19));
+        double sunsetHour = Double.parseDouble(sunsetDateTime.substring(11, 13) + "." + sunsetDateTime.substring(14,
+                16) + sunsetDateTime.substring(17, 19));
+        double currentHour = Double.parseDouble(currentDateTime.substring(11, 13) + "." + currentDateTime.substring(14,
+                16) + currentDateTime.substring(17, 19));
+
+        String conditionImage = "";
+
+        if ((currentHour > sunriseHour) && (currentHour < sunsetHour)) {
+            if ((conditionId >= 200) && (conditionId <= 232)) {
+                conditionImage = "/img/thunderstorm.jpg";
+            } else if ((conditionId >= 300) && (conditionId <= 531)) {
+                conditionImage = "/img/rain_day.jpg";
+            } else if ((conditionId >= 600) && (conditionId <= 622)) {
+                conditionImage = "/img/snow.jpg";
+            } else if ((conditionId >= 701) && (conditionId <= 781)) {
+                conditionImage = "/img/mist.jpg";
+            } else if ((conditionId >= 801) && (conditionId <= 804)) {
+                conditionImage = "/img/clouds.jpg";
+            } else if ((conditionId == 800)) {
+                conditionImage = "/img/sun.jpg";
+            } else conditionImage =  "";
+        } else {
+            if ((conditionId >= 200) && (conditionId <= 232)) {
+                conditionImage =  "/img/thunderstorm_n.jpg";
+            } else if ((conditionId >= 300) && (conditionId <= 531)) {
+                conditionImage = "/img/rain_night.jpg";
+            } else if ((conditionId >= 600) && (conditionId <= 622)) {
+                conditionImage = "/img/snow_n.jpg";
+            } else if ((conditionId >= 701) && (conditionId <= 781)) {
+                conditionImage = "/img/mist.jpg";
+            } else if ((conditionId >= 801) && (conditionId <= 804)) {
+                conditionImage = "/img/clouds_n.jpg";
+            } else if ((conditionId == 800)) {
+                conditionImage =  "/img/moon.jpg";
+            } else conditionImage = "";
+        }
+
+        return ControllerFunctions.class.getResource(conditionImage).toExternalForm();
+    }
+
     private Image setIcon(String path) {
         return new Image(path);
     }
@@ -120,9 +173,7 @@ public class ControllerFunctions {
             String pathDayIcon = weather.getHourlyWeatherIcon(hourIndexes.get(i));
             currentTimeWeatherIcon.setImage(setIcon(pathDayIcon));
 
-
             Separator separator = new Separator();
-            separator.setOpacity(0.5);
             separator.prefWidth(200.0);
 
             hourWeatherData.getChildren().addAll(currentDayHour, hourlyTemperatureForCurrentDayLabel,

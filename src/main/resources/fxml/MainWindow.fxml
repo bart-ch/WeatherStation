@@ -54,7 +54,7 @@
       </VBox>
         <ScrollPane fitToHeight="true" fitToWidth="true" prefHeight="200.0" prefWidth="200.0" GridPane.rowIndex="1">
          <content>
-            <GridPane prefHeight="461.0" prefWidth="439.0">
+            <GridPane fx:id="currentCityGridPane" prefHeight="461.0" prefWidth="439.0">
               <columnConstraints>
                 <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
               </columnConstraints>
