@@ -7,6 +7,7 @@
     requires javafx.web;
     requires com.google.gson;
     requires org.controlsfx.controls;
+    requires owm.japis;
 
     opens weatherStation;
     opens weatherStation.controller;
