@@ -1,5 +1,6 @@
 package weatherStation.model;
 
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
@@ -12,6 +13,9 @@ import javafx.scene.layout.VBox;
 import net.aksingh.owmjapis.api.APIException;
 import org.controlsfx.control.textfield.TextFields;
 
+import java.net.NoRouteToHostException;
+import java.net.SocketTimeoutException;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -94,12 +98,22 @@ public class ControllerFunctions {
             }
 
         } catch (APIException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
-            cityName.setText("Wpisano miasto o błędnym ID.");
-            e.printStackTrace();
+            cityName.setText("Niepoprawne dane.");
+
+        } catch (UnknownHostException ex) {
+            cityName.setText("Brak połączenia z siecią.");
+
+        } catch (NoRouteToHostException exc) {
+            cityName.setText("Przerwano połączenie z siecią.");
+
+        } catch (SocketTimeoutException exce) {
+            cityName.setText("Serwer nie odpowiada.");
+
+        } catch (Exception excep) {
+            cityName.setText("Brak danych.");
         }
     }
+
     private void deletePreviousWeatherData(Label cityName,
     Label currentTempForCurrentCity, Label currentDate, Label currentCityNow,
     Label currentPressure, Label currentHumidity,
@@ -231,11 +245,12 @@ public class ControllerFunctions {
             nextDay.setSpacing(5);
             nextDays.add(nextDay);
 
-            Label nextDayDate = new Label();
-            nextDaysDate.add(nextDayDate);
+            Label dayDate = new Label();
+            nextDaysDate.add(dayDate);
 
             HBox oneDayData = new HBox();
             oneDayData.setAlignment(Pos.CENTER);
+
             oneDayDataList.add(oneDayData);
 
             for (int j = 0; j < 4; j++) {
@@ -267,9 +282,9 @@ public class ControllerFunctions {
 
                 if (j == 0) {
                     String date = DateConverter.convertDateToPolish(weather.getHourlyDateTime(hourIndexes.get(0)));
-                    nextDayDate.setText(date);
-                    nextDayDate.getStyleClass().add("label-text");
-                    nextDayDate.setStyle("-fx-font: 14 System");
+                    dayDate.setText(date);
+                    dayDate.getStyleClass().add("label-text");
+                    dayDate.setStyle("-fx-font: 14 System; -fx-padding: 10px;");
                 }
 
                 selectedHour.setText(weather.getHourlyDateTime(hourIndexes.get(0)).substring(11, 16));
@@ -286,7 +301,7 @@ public class ControllerFunctions {
 
                 hourIndexes.remove(0);
             }
-            nextDay.getChildren().add(nextDayDate);
+            nextDay.getChildren().add(dayDate);
             nextDay.getChildren().add(oneDayData);
             currentCityNextDaysWeather.add(nextDay, 0, index);
             currentCityNextDaysWeather.setAlignment(Pos.CENTER);

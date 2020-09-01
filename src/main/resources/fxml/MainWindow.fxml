@@ -68,7 +68,10 @@
                         <Label fx:id="currentCityLabel" styleClass="label-text" stylesheets="@../css/style.css" text="Proszę wpisać miasto, aby wyświetlić prognozę pogody." textAlignment="CENTER" textFill="WHITE">
                            <font>
                               <Font size="16.0" />
-                           </font></Label>
+                           </font>
+                           <VBox.margin>
+                              <Insets top="10.0" />
+                           </VBox.margin></Label>
                         <Label fx:id="currentDateForCurrentCityLabel" styleClass="label-text" stylesheets="@../css/style.css" textFill="WHITE">
                            <font>
                               <Font size="14.0" />
