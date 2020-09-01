@@ -1,0 +1,60 @@
+.label-text {
+    -fx-effect: dropshadow(two-pass-box, #000, 1, 1, 1, 1);
+    -fx-text-fill: #ffffff;
+}
+
+.scroll-bar {
+    -fx-background-color: #8585ad;
+}
+
+.scroll-bar > .track {
+    -fx-background-color: transparent;
+}
+
+.scroll-bar > .thumb {
+    -fx-background-color: #666699;
+}
+
+.scroll-bar:hover {
+    -fx-cursor: hand;
+}
+
+.scroll-bar > .increment-button, .decrement-button {
+    -fx-background-color: #666699;
+    -fx-border-color: transparent;
+}
+
+.scroll-bar > .increment-button:hover, .decrement-button:hover {
+    -fx-background-color: #52527a;
+}
+
+.scroll-bar > .increment-button > .increment-arrow, .decrement-button > .decrement-arrow {
+    -fx-background-color: #002633;
+}
+
+.scroll-pane > .viewport {
+    -fx-background-color: #52527a;
+}
+
+.scroll-pane {
+    -fx-background-color: #52527a;
+}
+
+.button {
+    -fx-background-color: #7575a3;
+    -fx-text-fill: #ffffff;
+}
+
+.button:hover {
+    -fx-background-color: #8585ad;
+    -fx-cursor: hand;
+}
+
+.text-field {
+     -fx-text-box-border: #47476b;
+     -fx-focus-color: #1f1f2e;
+ }
+
+.text-field:hover {
+    -fx-cursor: hand;
+}

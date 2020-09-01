@@ -53,6 +53,10 @@ public class MainWindowController implements Initializable {
     @FXML
     private Label currentDateForDesiredCityLabel;
 
+
+    @FXML
+    private GridPane currentCityGridPane;
+
     @FXML
     private TextField desiredCityTextField;
 
@@ -66,7 +70,7 @@ public class MainWindowController implements Initializable {
        controllerFunctions.loadWeather(currentCityTextField,currentCityLabel,
                currentTempForCurrentCityLabel, currentDateForCurrentCityLabel, currentCityNowLabel,
                currentPressureForCurrentCity, currentHumidityForCurrentCity, currentCityCurrentDayNextHoursWeather,
-               currentWeatherIconForCurrentCity,weatherForNextDaysForCurrentCity);
+               currentWeatherIconForCurrentCity,weatherForNextDaysForCurrentCity, currentCityGridPane);
 
     }
 
