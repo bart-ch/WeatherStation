@@ -24,6 +24,9 @@ public class MainWindowController implements Initializable {
     private TextField currentCityTextField;
 
     @FXML
+    private GridPane currentCityGridPane;
+
+    @FXML
     private Label currentCityLabel;
 
     @FXML
@@ -48,20 +51,43 @@ public class MainWindowController implements Initializable {
     private HBox currentCityCurrentDayNextHoursWeather;
 
     @FXML
+    private GridPane weatherForNextDaysForCurrentCity;
+
+    @FXML
+    private GridPane desiredCityGridPane;
+
+    @FXML
     private Label desiredCityLabel;
 
     @FXML
     private Label currentDateForDesiredCityLabel;
 
+    @FXML
+    private Label currentDateForCurrentCityLabel1;
 
     @FXML
-    private GridPane currentCityGridPane;
+    private Label desiredCityNowLabel;
+
+    @FXML
+    private Label currentTempForDesiredCityLabel;
+
+    @FXML
+    private ImageView currentWeatherIconForDesiredCity;
+
+    @FXML
+    private Label currentPressureForDesiredCity;
+
+    @FXML
+    private Label currentHumidityForDesiredCity;
+
+    @FXML
+    private HBox desiredCityCurrentDayNextHoursWeather;
+
+    @FXML
+    private GridPane weatherForNextDaysForDesiredCity;
 
     @FXML
     private TextField desiredCityTextField;
-
-    @FXML
-    private GridPane weatherForNextDaysForCurrentCity;
 
     private ControllerFunctions controllerFunctions;
 
@@ -76,7 +102,10 @@ public class MainWindowController implements Initializable {
 
     @FXML
     void desiredCityButtonAction() {
-        //controllerFunctions.loadWeatherForCurrentDay(desiredCityTextField,desiredCityLabel);
+        controllerFunctions.loadWeather(desiredCityTextField,desiredCityLabel,
+                currentTempForDesiredCityLabel, currentDateForDesiredCityLabel, desiredCityNowLabel,
+                currentPressureForDesiredCity, currentHumidityForDesiredCity, desiredCityCurrentDayNextHoursWeather,
+                currentWeatherIconForDesiredCity,weatherForNextDaysForDesiredCity, desiredCityGridPane);
     }
 
     @Override

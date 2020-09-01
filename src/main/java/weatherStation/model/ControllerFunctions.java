@@ -118,7 +118,7 @@ public class ControllerFunctions {
     Label currentTempForCurrentCity, Label currentDate, Label currentCityNow,
     Label currentPressure, Label currentHumidity,
     HBox currentDayNextHoursWeather, ImageView currentWeatherIcon,
-    GridPane weatherForNextDays, GridPane weatherBackground ) {
+    GridPane weatherForNextDays, GridPane weatherBackground) {
         cityName.setText(null);
         currentTempForCurrentCity.setText(null);
         currentDate.setText(null);
