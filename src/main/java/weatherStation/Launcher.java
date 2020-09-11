@@ -3,11 +3,7 @@ package weatherStation;/**
  */
 
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
-import weatherStation.model.CityProvider;
 import weatherStation.view.MainWindow;
 
 public class Launcher extends Application {
@@ -18,7 +14,7 @@ public class Launcher extends Application {
     }
 
     @Override
-    public void start(Stage stage) throws Exception {
+    public void start(Stage stage) {
         MainWindow mainWindow = new MainWindow();
         mainWindow.initializeStage();
 

@@ -1,14 +1,12 @@
 package weatherStation.model;
 
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.Label;
-import javafx.scene.control.Separator;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import net.aksingh.owmjapis.api.APIException;
 import org.controlsfx.control.textfield.TextFields;
@@ -26,33 +24,34 @@ import java.util.Vector;
  */
 public class ControllerFunctions {
 
-    private TextField currentCity;
-    private TextField desiredCity;
-
     private List<City> citiesList;
     private HashMap<String, String> citiesNamesWithCountryCodes;
     private ForecastHours forecastHours = new ForecastHours();
 
-    public ControllerFunctions(TextField currentCity,TextField desiredCity) {
-
-        this.currentCity = currentCity;
-        this.desiredCity = desiredCity;
+    public ControllerFunctions(TextField currentCity, TextField desiredCity) {
 
         try {
             citiesList = new CityProvider().getCityList();
             citiesNamesWithCountryCodes = new HashMap<String, String>();
 
-            for(int i = 0; i < citiesList.size(); i++) {
+            for (int i = 0; i < citiesList.size(); i++) {
                 String countryCode = citiesList.get(i).getCountryCode();
                 String city = citiesList.get(i).getCityName();
-                citiesNamesWithCountryCodes.put(city,city + ", " + countryCode);
+                citiesNamesWithCountryCodes.put(city, city + ", " + countryCode);
             }
 
             TextFields.bindAutoCompletion(currentCity, citiesNamesWithCountryCodes.values());
             TextFields.bindAutoCompletion(desiredCity, citiesNamesWithCountryCodes.values());
 
         } catch (Exception e) {
-            e.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Nie udało się wczytać pliku posiadającego listę "
+                                    + "miast. \nNastąpi zamknięcie programu", ButtonType.OK);
+            alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
+            alert.showAndWait();
+            if (alert.getResult() == ButtonType.OK) {
+                System.exit(0);
+            }
+
         }
     }
 
@@ -60,7 +59,7 @@ public class ControllerFunctions {
                             Label currentTempForCurrentCity, Label currentDate, Label currentCityNow,
                             Label currentPressure, Label currentHumidity,
                             HBox currentDayNextHoursWeather, ImageView currentWeatherIcon,
-                            GridPane weatherForNextDays, GridPane weatherBackground ) {
+                            GridPane weatherForNextDays, GridPane weatherBackground) {
 
         deletePreviousWeatherData(cityName, currentTempForCurrentCity, currentDate, currentCityNow,
                 currentPressure, currentHumidity, currentDayNextHoursWeather, currentWeatherIcon, weatherForNextDays, weatherBackground);
@@ -71,7 +70,7 @@ public class ControllerFunctions {
         try {
             if (userCityId <= 0) {
                 throw new Exception();
-            } else{
+            } else {
                 WeatherProvider weather = new WeatherProvider(userCityId);
                 cityName.setText(weather.getCityName() + ", " + weather.getCountryCode());
                 currentDate.setText(weather.getCurrentDate());
@@ -115,10 +114,10 @@ public class ControllerFunctions {
     }
 
     private void deletePreviousWeatherData(Label cityName,
-    Label currentTempForCurrentCity, Label currentDate, Label currentCityNow,
-    Label currentPressure, Label currentHumidity,
-    HBox currentDayNextHoursWeather, ImageView currentWeatherIcon,
-    GridPane weatherForNextDays, GridPane weatherBackground) {
+                                           Label currentTempForCurrentCity, Label currentDate, Label currentCityNow,
+                                           Label currentPressure, Label currentHumidity,
+                                           HBox currentDayNextHoursWeather, ImageView currentWeatherIcon,
+                                           GridPane weatherForNextDays, GridPane weatherBackground) {
         cityName.setText(null);
         currentTempForCurrentCity.setText(null);
         currentDate.setText(null);
@@ -156,10 +155,10 @@ public class ControllerFunctions {
                 conditionImage = "/img/clouds_day.jpg";
             } else if ((conditionId == 800)) {
                 conditionImage = "/img/sun.jpg";
-            } else conditionImage =  "";
+            } else conditionImage = "";
         } else {
             if ((conditionId >= 200) && (conditionId <= 232)) {
-                conditionImage =  "/img/thunderstorm_night.jpg";
+                conditionImage = "/img/thunderstorm_night.jpg";
             } else if ((conditionId >= 300) && (conditionId <= 531)) {
                 conditionImage = "/img/rain_night.jpg";
             } else if ((conditionId >= 600) && (conditionId <= 622)) {
@@ -169,7 +168,7 @@ public class ControllerFunctions {
             } else if ((conditionId >= 801) && (conditionId <= 804)) {
                 conditionImage = "/img/clouds_night.jpg";
             } else if ((conditionId == 800)) {
-                conditionImage =  "/img/moon.jpg";
+                conditionImage = "/img/moon.jpg";
             } else conditionImage = "";
         }
 
@@ -207,7 +206,7 @@ public class ControllerFunctions {
             String pathDayIcon = weather.getHourlyWeatherIcon(hourIndexes.get(i));
             currentTimeWeatherIcon.setImage(setIcon(pathDayIcon));
 
-            hourWeatherData.getChildren().addAll(currentDayHour,currentTimeWeatherIcon,
+            hourWeatherData.getChildren().addAll(currentDayHour, currentTimeWeatherIcon,
                     hourlyTemperatureForCurrentDayLabel,
                     hourlyHumidityForCurrentDayLabel);
             currentDayNextHoursWeather.getChildren().add(hourWeatherData);

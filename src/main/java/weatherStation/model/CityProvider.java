@@ -17,14 +17,9 @@ import java.util.List;
 public class CityProvider {
     private List<City> cityList;
 
-    public CityProvider() throws Exception {
-        loadJsonFile();
-    }
+    private void loadJsonFile() {
 
-    private void loadJsonFile() throws Exception {
-
-        try {
-            InputStream inputStream = getClass().getClassLoader().getResourceAsStream("city.list.min.json");
+            InputStream inputStream = getClass().getClassLoader().getResourceAsStream("city.lisot.min.json");
 
             JsonArray jsonArray = JsonParser.parseReader(new InputStreamReader(inputStream)).getAsJsonArray();
 
@@ -33,13 +28,10 @@ public class CityProvider {
             List<City> cityList = gson.fromJson(jsonArray, listType);
 
             this.cityList = cityList;
-
-        } catch (Exception ex) {
-            throw new Exception();
-        }
     }
 
     public List<City> getCityList() {
+        loadJsonFile();
         return cityList;
     }
 }
