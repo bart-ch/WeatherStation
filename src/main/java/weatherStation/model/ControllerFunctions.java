@@ -11,6 +11,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import net.aksingh.owmjapis.api.APIException;
 import org.controlsfx.control.textfield.TextFields;
+
 import java.net.NoRouteToHostException;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
@@ -49,8 +50,6 @@ public class ControllerFunctions {
         TextFields.bindAutoCompletion(desiredCity, citiesNamesWithCountryCodes.values());
     }
 
-
-
     public void loadWeather(TextField enteredCity, Label cityName,
                             Label currentTempForCurrentCity, Label currentDate, Label currentCityNow,
                             Label currentPressure, Label currentHumidity,
@@ -66,31 +65,31 @@ public class ControllerFunctions {
         try {
             if (userCityId <= 0) {
                 throw new Exception();
-            } else {
-                WeatherProvider weather = new WeatherProvider(userCityId);
-                cityName.setText(weather.getCityName() + ", " + weather.getCountryCode());
-                currentDate.setText(weather.getCurrentDate());
-
-                currentCityNow.setText("Teraz:");
-                currentTempForCurrentCity.setText(weather.getCurrentTemperature());
-                currentPressure.setText("Ciśnienie: " + weather.getCurrentPressure());
-                currentHumidity.setText("Wilgotność: " + weather.getCurrentHumidity());
-
-                String pathCurrentIconLeft = weather.getCurrentWeatherIcon();
-                currentWeatherIcon.setImage(setIcon(pathCurrentIconLeft));
-
-                String imageURL = getUrlOfBackgroundImage(weather.getCurrentCondition(),
-                        weather.getCurrentDateTime(), weather.getSunriseDateTime(),
-                        weather.getSunsetDateTime());
-                weatherBackground.setStyle("-fx-background-image: url('" + imageURL + "'); -fx-background-position: center; " +
-                        "-fx-background-size: cover;");
-
-                Vector<Integer> hourIndexes = forecastHours.getIndex(weather, "today");
-                Vector<Integer> hourIndexesNextDays = forecastHours.getIndex(weather, "nextDay");
-
-                loadWeatherForCurrentDayForNextHours(currentDayNextHoursWeather, hourIndexes, weather);
-                loadHoursDataForNextDays(weatherForNextDays, hourIndexesNextDays, weather);
             }
+            WeatherProvider weather = new WeatherProvider(userCityId);
+            cityName.setText(weather.getCityName() + ", " + weather.getCountryCode());
+            currentDate.setText(weather.getCurrentDate());
+
+            currentCityNow.setText(Messages.NOW);
+            currentTempForCurrentCity.setText(weather.getCurrentTemperature());
+            currentPressure.setText(Messages.PRESSURE + weather.getCurrentPressure());
+            currentHumidity.setText(Messages.HUMIDITY + weather.getCurrentHumidity());
+
+            String pathCurrentIconLeft = weather.getCurrentWeatherIcon();
+            currentWeatherIcon.setImage(setIcon(pathCurrentIconLeft));
+
+            String imageURL = getUrlOfBackgroundImage(weather.getCurrentCondition(),
+                    weather.getCurrentDateTime(), weather.getSunriseDateTime(),
+                    weather.getSunsetDateTime());
+            weatherBackground.setStyle("-fx-background-image: url('" + imageURL + "'); -fx-background-position: center; " +
+                    "-fx-background-size: cover;");
+
+            Vector<Integer> hourIndexes = forecastHours.getIndex(weather, "today");
+            Vector<Integer> hourIndexesNextDays = forecastHours.getIndex(weather, "nextDay");
+
+            loadWeatherForCurrentDayForNextHours(currentDayNextHoursWeather, hourIndexes, weather);
+            loadHoursDataForNextDays(weatherForNextDays, hourIndexesNextDays, weather);
+
 
         } catch (APIException e) {
             cityName.setText("Niepoprawne dane.");
@@ -105,7 +104,7 @@ public class ControllerFunctions {
             cityName.setText("Serwer nie odpowiada.");
 
         } catch (Exception excep) {
-            cityName.setText("Brak danych.");
+            cityName.setText("Brak danych o podanym mieście.");
         }
     }
 
