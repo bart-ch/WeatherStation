@@ -111,7 +111,8 @@ public class MainWindowController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
-            controllerFunctions = new ControllerFunctions(currentCityTextField, desiredCityTextField);
+            controllerFunctions = new ControllerFunctions();
+            controllerFunctions.init(currentCityTextField, desiredCityTextField);
             Platform.runLater(() -> currentCityTextField.requestFocus());
     }
 }

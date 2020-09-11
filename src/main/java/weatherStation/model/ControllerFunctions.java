@@ -1,23 +1,20 @@
 package weatherStation.model;
 
 import javafx.geometry.Pos;
-import javafx.scene.control.*;
+import javafx.scene.control.Label;
+import javafx.scene.control.Separator;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import net.aksingh.owmjapis.api.APIException;
 import org.controlsfx.control.textfield.TextFields;
-
 import java.net.NoRouteToHostException;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Vector;
+import java.util.*;
 
 /**
  * Created by "Bartosz Chodyla" on 2020-08-25.
@@ -25,35 +22,34 @@ import java.util.Vector;
 public class ControllerFunctions {
 
     private List<City> citiesList;
-    private HashMap<String, String> citiesNamesWithCountryCodes;
+    private CityProvider cityProvider;
+    private Map<String, String> citiesNamesWithCountryCodes;
     private ForecastHours forecastHours = new ForecastHours();
 
-    public ControllerFunctions(TextField currentCity, TextField desiredCity) {
-
-        try {
-            citiesList = new CityProvider().getCityList();
-            citiesNamesWithCountryCodes = new HashMap<String, String>();
-
-            for (int i = 0; i < citiesList.size(); i++) {
-                String countryCode = citiesList.get(i).getCountryCode();
-                String city = citiesList.get(i).getCityName();
-                citiesNamesWithCountryCodes.put(city, city + ", " + countryCode);
-            }
-
-            TextFields.bindAutoCompletion(currentCity, citiesNamesWithCountryCodes.values());
-            TextFields.bindAutoCompletion(desiredCity, citiesNamesWithCountryCodes.values());
-
-        } catch (Exception e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR, "Nie udało się wczytać pliku posiadającego listę "
-                                    + "miast. \nNastąpi zamknięcie programu", ButtonType.OK);
-            alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
-            alert.showAndWait();
-            if (alert.getResult() == ButtonType.OK) {
-                System.exit(0);
-            }
-
-        }
+    public ControllerFunctions() {
+        cityProvider = new CityProvider();
     }
+
+    public final void init(TextField currentCity, TextField desiredCity) {
+        citiesList = cityProvider.getCityList();
+        enableAutoCompletionOfCityTextFields(currentCity, desiredCity);
+    }
+
+    private void enableAutoCompletionOfCityTextFields(TextField currentCity, TextField desiredCity) {
+
+        citiesNamesWithCountryCodes = new HashMap<>();
+
+        for (City city : citiesList) {
+            String countryCode = city.getCountryCode();
+            String cityName = city.getCityName();
+            citiesNamesWithCountryCodes.put(cityName, cityName + ", " + countryCode);
+        }
+
+        TextFields.bindAutoCompletion(currentCity, citiesNamesWithCountryCodes.values());
+        TextFields.bindAutoCompletion(desiredCity, citiesNamesWithCountryCodes.values());
+    }
+
+
 
     public void loadWeather(TextField enteredCity, Label cityName,
                             Label currentTempForCurrentCity, Label currentDate, Label currentCityNow,

@@ -4,7 +4,9 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonParser;
 import com.google.gson.reflect.TypeToken;
-
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.layout.Region;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
@@ -19,19 +21,35 @@ public class CityProvider {
 
     private void loadJsonFile() {
 
-            InputStream inputStream = getClass().getClassLoader().getResourceAsStream("city.lisot.min.json");
+        try {
+            InputStream inputStream = getClass().getClassLoader().getResourceAsStream("city.list.min.json");
 
             JsonArray jsonArray = JsonParser.parseReader(new InputStreamReader(inputStream)).getAsJsonArray();
 
             Gson gson = new Gson();
-            Type listType = new TypeToken<List<City>>(){}.getType();
+            Type listType = new TypeToken<List<City>>() {
+            }.getType();
             List<City> cityList = gson.fromJson(jsonArray, listType);
 
             this.cityList = cityList;
+
+        } catch (Exception e) {
+            handleCityFileException();
+        }
     }
 
     public List<City> getCityList() {
         loadJsonFile();
         return cityList;
+    }
+
+    private void handleCityFileException() {
+        Alert alert = new Alert(Alert.AlertType.ERROR, "Nie udało się wczytać pliku posiadającego listę "
+                + "miast. \nNastąpi zamknięcie programu", ButtonType.CLOSE);
+        alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
+        alert.showAndWait();
+        if (alert.getResult() == ButtonType.CLOSE) {
+            System.exit(0);
+        }
     }
 }
