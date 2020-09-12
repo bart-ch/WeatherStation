@@ -6,7 +6,7 @@ package weatherStation.model;
 public class ImageProvider {
 
     public static String getBackgroundImagePath(int conditionId, double currentHour, double sunriseHour,
-                                            double sunsetHour) {
+                                                double sunsetHour) {
 
         String conditionImage;
 

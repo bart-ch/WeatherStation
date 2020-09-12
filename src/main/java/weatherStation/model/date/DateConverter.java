@@ -38,7 +38,7 @@ public class DateConverter {
             case "Sun":
                 return "Niedziela";
         }
-        return null;
+        return day;
     }
 
     private static String convertDateMonthName(String month) {
@@ -68,7 +68,7 @@ public class DateConverter {
             case "Dec":
                 return "grudnia";
         }
-        return null;
+        return month;
     }
 
 }
