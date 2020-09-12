@@ -7,6 +7,7 @@ import net.aksingh.owmjapis.model.HourlyWeatherForecast;
 import net.aksingh.owmjapis.model.param.Weather;
 import net.aksingh.owmjapis.model.param.WeatherData;
 import weatherStation.Config;
+import weatherStation.model.date.DateConverter;
 
 import java.util.List;
 

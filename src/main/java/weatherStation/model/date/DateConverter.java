@@ -1,4 +1,4 @@
-package weatherStation.model;
+package weatherStation.model.date;
 
 /**
  * Created by "Bartosz Chodyla" on 2020-08-26.

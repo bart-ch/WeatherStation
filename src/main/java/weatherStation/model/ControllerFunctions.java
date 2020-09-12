@@ -11,6 +11,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import net.aksingh.owmjapis.api.APIException;
 import org.controlsfx.control.textfield.TextFields;
+import weatherStation.model.city.City;
+import weatherStation.model.city.CityProvider;
+import weatherStation.model.date.DateConverter;
 
 import java.net.NoRouteToHostException;
 import java.net.SocketTimeoutException;
@@ -78,14 +81,11 @@ public class ControllerFunctions {
             String pathCurrentIconLeft = weather.getCurrentWeatherIcon();
             currentWeatherIcon.setImage(setIcon(pathCurrentIconLeft));
 
-            String imageURL = getUrlOfBackgroundImage(weather.getCurrentCondition(),
-                    weather.getCurrentDateTime(), weather.getSunriseDateTime(),
-                    weather.getSunsetDateTime());
-            weatherBackground.setStyle("-fx-background-image: url('" + imageURL + "'); -fx-background-position: center; " +
-                    "-fx-background-size: cover;");
+            setBackgroundImage(weather, weatherBackground);
 
-            Vector<Integer> hourIndexes = forecastHours.getIndex(weather, "today");
-            Vector<Integer> hourIndexesNextDays = forecastHours.getIndex(weather, "nextDay");
+
+            List<Integer> hourIndexes = forecastHours.getIndex(weather, "today");
+            List<Integer> hourIndexesNextDays = forecastHours.getIndex(weather, "nextDay");
 
             loadWeatherForCurrentDayForNextHours(currentDayNextHoursWeather, hourIndexes, weather);
             loadHoursDataForNextDays(weatherForNextDays, hourIndexesNextDays, weather);
@@ -126,7 +126,12 @@ public class ControllerFunctions {
     }
 
 
-    private static String getUrlOfBackgroundImage(int conditionId, String currentDateTime, String sunriseDateTime, String sunsetDateTime) {
+    private void setBackgroundImage(WeatherProvider weather, GridPane weatherBackground) {
+
+        int conditionId = weather.getCurrentCondition();
+        String currentDateTime = weather.getCurrentDateTime();
+        String sunriseDateTime = weather.getSunriseDateTime();
+        String sunsetDateTime = weather.getSunsetDateTime();
 
         double sunriseHour = Double.parseDouble(sunriseDateTime.substring(11, 13) + "." + sunriseDateTime.substring(14,
                 16) + sunriseDateTime.substring(17, 19));
@@ -135,70 +140,33 @@ public class ControllerFunctions {
         double currentHour = Double.parseDouble(currentDateTime.substring(11, 13) + "." + currentDateTime.substring(14,
                 16) + currentDateTime.substring(17, 19));
 
-        String conditionImage;
+        String imageURL = ImageProvider.getBackgroundImagePath(conditionId, currentHour, sunriseHour, sunsetHour);
 
-        if ((currentHour > sunriseHour) && (currentHour < sunsetHour)) {
-            if ((conditionId >= 200) && (conditionId <= 232)) {
-                conditionImage = "/img/thunderstorm_day.jpg";
-            } else if ((conditionId >= 300) && (conditionId <= 531)) {
-                conditionImage = "/img/rain_day.jpg";
-            } else if ((conditionId >= 600) && (conditionId <= 622)) {
-                conditionImage = "/img/snow_day.jpg";
-            } else if ((conditionId >= 701) && (conditionId <= 781)) {
-                conditionImage = "/img/fog_day.jpg";
-            } else if ((conditionId >= 801) && (conditionId <= 804)) {
-                conditionImage = "/img/clouds_day.jpg";
-            } else if ((conditionId == 800)) {
-                conditionImage = "/img/sun.jpg";
-            } else conditionImage = "";
-        } else {
-            if ((conditionId >= 200) && (conditionId <= 232)) {
-                conditionImage = "/img/thunderstorm_night.jpg";
-            } else if ((conditionId >= 300) && (conditionId <= 531)) {
-                conditionImage = "/img/rain_night.jpg";
-            } else if ((conditionId >= 600) && (conditionId <= 622)) {
-                conditionImage = "/img/snow_night.jpg";
-            } else if ((conditionId >= 701) && (conditionId <= 781)) {
-                conditionImage = "/img/fog_night.jpg";
-            } else if ((conditionId >= 801) && (conditionId <= 804)) {
-                conditionImage = "/img/clouds_night.jpg";
-            } else if ((conditionId == 800)) {
-                conditionImage = "/img/moon.jpg";
-            } else conditionImage = "";
-        }
+        weatherBackground.setStyle("-fx-background-image: url('" + imageURL + "'); -fx-background-position: center; " +
+                "-fx-background-size: cover;");
 
-        return ControllerFunctions.class.getResource(conditionImage).toExternalForm();
     }
 
     private Image setIcon(String path) {
         return new Image(path);
     }
 
-    private void loadWeatherForCurrentDayForNextHours(HBox currentDayNextHoursWeather, Vector<Integer> hourIndexes, WeatherProvider weather) {
-        List<VBox> containerForHourData = new ArrayList<>();
-        List<Label> selectedHoursForCurrentDay = new ArrayList<>();
-        List<ImageView> hourlyIconForCurrentDay = new ArrayList<>();
-        List<Label> hourlyTemperatureForCurrentDay = new ArrayList<>();
-        List<Label> hourlyHumidityForCurrentDay = new ArrayList<>();
+    private void loadWeatherForCurrentDayForNextHours(HBox currentDayNextHoursWeather, List<Integer> hourIndexes,
+                                                      WeatherProvider weather) {
 
-        for (int i = 0; i < hourIndexes.size(); i++) {
+        for (Integer hourIndex : hourIndexes) {
             VBox hourWeatherData = new VBox();
             hourWeatherData.setAlignment(Pos.CENTER);
             hourWeatherData.setPrefWidth(110);
-            containerForHourData.add(hourWeatherData);
 
             Label currentDayHour = new Label();
-            selectedHoursForCurrentDay.add(currentDayHour);
 
             Label hourlyTemperatureForCurrentDayLabel = new Label();
-            hourlyTemperatureForCurrentDay.add(hourlyTemperatureForCurrentDayLabel);
 
             Label hourlyHumidityForCurrentDayLabel = new Label();
-            hourlyHumidityForCurrentDay.add(hourlyHumidityForCurrentDayLabel);
 
             ImageView currentTimeWeatherIcon = new ImageView();
-            hourlyIconForCurrentDay.add(currentTimeWeatherIcon);
-            String pathDayIcon = weather.getHourlyWeatherIcon(hourIndexes.get(i));
+            String pathDayIcon = weather.getHourlyWeatherIcon(hourIndex);
             currentTimeWeatherIcon.setImage(setIcon(pathDayIcon));
 
             hourWeatherData.getChildren().addAll(currentDayHour, currentTimeWeatherIcon,
@@ -206,70 +174,50 @@ public class ControllerFunctions {
                     hourlyHumidityForCurrentDayLabel);
             currentDayNextHoursWeather.getChildren().add(hourWeatherData);
 
-            currentDayHour.setText(weather.getHourlyDateTime(hourIndexes.get(i)).substring(11, 16));
+            currentDayHour.setText(weather.getHourlyDateTime(hourIndex).substring(11, 16));
             currentDayHour.getStyleClass().add("label-text");
 
-            hourlyTemperatureForCurrentDayLabel.setText(weather.getHourlyTemperature(hourIndexes.get(i)));
+            hourlyTemperatureForCurrentDayLabel.setText(weather.getHourlyTemperature(hourIndex));
             hourlyTemperatureForCurrentDayLabel.getStyleClass().add("label-text");
 
-            hourlyHumidityForCurrentDayLabel.setText(weather.getHourlyHumidity(hourIndexes.get(i)));
+            hourlyHumidityForCurrentDayLabel.setText(weather.getHourlyHumidity(hourIndex));
             hourlyHumidityForCurrentDayLabel.getStyleClass().add("label-text");
 
         }
     }
 
-    private void loadHoursDataForNextDays(GridPane currentCityNextDaysWeather, Vector<Integer> hourIndexes,
+    private void loadHoursDataForNextDays(GridPane currentCityNextDaysWeather, List<Integer> hourIndexes,
                                           WeatherProvider weather) {
-        List<VBox> nextDays = new ArrayList<>();
-        List<Label> nextDaysDate = new ArrayList<>();
-        List<HBox> oneDayDataList = new ArrayList<>();
-        List<VBox> hoursData = new ArrayList<>();
-        List<Label> selectedHours = new ArrayList<>();
-        List<ImageView> hourlyIcons = new ArrayList<>();
-        List<Label> hourlyTemperatureData = new ArrayList<>();
-        List<Label> hourlyHumidityData = new ArrayList<>();
-        List<Separator> separators = new ArrayList<>();
 
         int index = 1;
+        final int NUMBER_OF_FORECASTING_NEXT_DAYS = 4;
+        final int NUMBER_OF_FORECASTING_TIMES_PER_DAY = 4;
 
-        for (int i = 1; i <= 4; i++) {
+        for (int i = 1; i <= NUMBER_OF_FORECASTING_NEXT_DAYS; i++) {
 
             VBox nextDay = new VBox();
             nextDay.setAlignment(Pos.CENTER);
             nextDay.setSpacing(5);
-            nextDays.add(nextDay);
 
             Label dayDate = new Label();
-            nextDaysDate.add(dayDate);
 
             HBox oneDayData = new HBox();
             oneDayData.setAlignment(Pos.CENTER);
 
-            oneDayDataList.add(oneDayData);
-
-            for (int j = 0; j < 4; j++) {
+            for (int j = 0; j < NUMBER_OF_FORECASTING_TIMES_PER_DAY; j++) {
                 VBox hourData = new VBox();
                 hourData.setAlignment(Pos.CENTER);
                 hourData.setPrefWidth(110);
                 hourData.setSpacing(5);
-                hoursData.add(hourData);
 
                 Label selectedHour = new Label();
-                selectedHours.add(selectedHour);
-
                 ImageView hourlyIcon = new ImageView();
-                hourlyIcons.add(hourlyIcon);
-
                 Label hourlyTemperature = new Label();
-                hourlyTemperatureData.add(hourlyTemperature);
-
                 Label hourlyHumidity = new Label();
-                hourlyHumidityData.add(hourlyHumidity);
 
                 Separator separator = new Separator();
                 separator.setOpacity(0.5);
                 separator.prefWidth(200.0);
-                separators.add(separator);
 
                 hourData.getChildren().addAll(selectedHour, hourlyIcon, hourlyTemperature, hourlyHumidity, separator);
                 oneDayData.getChildren().add(hourData);
@@ -304,22 +252,17 @@ public class ControllerFunctions {
         }
     }
 
-    private int getCityId(String userCity) {
-        int cityId = 0;
-        int iterator = 0;
+    private int getCityId(String givenCity) {
 
-        String[] splittedArray = null;
-        splittedArray = userCity.split(",");
-        userCity = splittedArray[0];
+        String userCity = givenCity.substring(0, givenCity.indexOf(","));
 
         if (citiesNamesWithCountryCodes.containsKey(userCity)) {
-            for (City i : citiesList) {
-                if (citiesList.get(iterator).getCityName().equals(userCity)) {
-                    cityId = citiesList.get(iterator).getCityId();
+            for (City city : citiesList) {
+                if (city.getCityName().equals(userCity)) {
+                    return city.getCityId();
                 }
-                iterator++;
             }
         }
-        return cityId;
+        return 0;
     }
 }

@@ -1,4 +1,4 @@
-package weatherStation.model;
+package weatherStation.model.city;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -7,6 +7,8 @@ import com.google.gson.reflect.TypeToken;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.layout.Region;
+import weatherStation.model.city.City;
+
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
