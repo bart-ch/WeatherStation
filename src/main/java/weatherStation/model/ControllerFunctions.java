@@ -1,6 +1,5 @@
 package weatherStation.model;
 
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
@@ -12,55 +11,54 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import net.aksingh.owmjapis.api.APIException;
 import org.controlsfx.control.textfield.TextFields;
+import weatherStation.model.city.City;
+import weatherStation.model.city.CityProvider;
+import weatherStation.model.date.DateConverter;
+import weatherStation.model.date.DateTime;
+import weatherStation.model.weather.CurrentWeatherData;
+import weatherStation.model.weather.HourlyWeatherForecastData;
+import weatherStation.model.weather.WeatherProvider;
 
 import java.net.NoRouteToHostException;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Vector;
+import java.util.Map;
 
 /**
  * Created by "Bartosz Chodyla" on 2020-08-25.
  */
 public class ControllerFunctions {
 
-    private TextField currentCity;
-    private TextField desiredCity;
-
     private List<City> citiesList;
-    private HashMap<String, String> citiesNamesWithCountryCodes;
-    private ForecastHours forecastHours = new ForecastHours();
+    private Map<String, String> citiesNamesWithCountryCodes;
 
-    public ControllerFunctions(TextField currentCity,TextField desiredCity) {
+    public final void init(TextField currentCity, TextField desiredCity) {
+        CityProvider cityProvider = new CityProvider();
+        citiesList = cityProvider.getCityList();
+        enableAutoCompletionOfCityTextFields(currentCity, desiredCity);
+    }
 
-        this.currentCity = currentCity;
-        this.desiredCity = desiredCity;
+    private void enableAutoCompletionOfCityTextFields(TextField currentCity, TextField desiredCity) {
 
-        try {
-            citiesList = new CityProvider().getCityList();
-            citiesNamesWithCountryCodes = new HashMap<String, String>();
+        citiesNamesWithCountryCodes = new HashMap<>();
 
-            for(int i = 0; i < citiesList.size(); i++) {
-                String countryCode = citiesList.get(i).getCountryCode();
-                String city = citiesList.get(i).getCityName();
-                citiesNamesWithCountryCodes.put(city,city + ", " + countryCode);
-            }
-
-            TextFields.bindAutoCompletion(currentCity, citiesNamesWithCountryCodes.values());
-            TextFields.bindAutoCompletion(desiredCity, citiesNamesWithCountryCodes.values());
-
-        } catch (Exception e) {
-            e.printStackTrace();
+        for (City city : citiesList) {
+            String countryCode = city.getCountryCode();
+            String cityName = city.getCityName();
+            citiesNamesWithCountryCodes.put(cityName, cityName + ", " + countryCode);
         }
+
+        TextFields.bindAutoCompletion(currentCity, citiesNamesWithCountryCodes.values());
+        TextFields.bindAutoCompletion(desiredCity, citiesNamesWithCountryCodes.values());
     }
 
     public void loadWeather(TextField enteredCity, Label cityName,
                             Label currentTempForCurrentCity, Label currentDate, Label currentCityNow,
                             Label currentPressure, Label currentHumidity,
                             HBox currentDayNextHoursWeather, ImageView currentWeatherIcon,
-                            GridPane weatherForNextDays, GridPane weatherBackground ) {
+                            GridPane weatherForNextDays, GridPane weatherBackground) {
 
         deletePreviousWeatherData(cityName, currentTempForCurrentCity, currentDate, currentCityNow,
                 currentPressure, currentHumidity, currentDayNextHoursWeather, currentWeatherIcon, weatherForNextDays, weatherBackground);
@@ -71,31 +69,32 @@ public class ControllerFunctions {
         try {
             if (userCityId <= 0) {
                 throw new Exception();
-            } else{
-                WeatherProvider weather = new WeatherProvider(userCityId);
-                cityName.setText(weather.getCityName() + ", " + weather.getCountryCode());
-                currentDate.setText(weather.getCurrentDate());
-
-                currentCityNow.setText("Teraz:");
-                currentTempForCurrentCity.setText(weather.getCurrentTemperature());
-                currentPressure.setText("Ciśnienie: " + weather.getCurrentPressure());
-                currentHumidity.setText("Wilgotność: " + weather.getCurrentHumidity());
-
-                String pathCurrentIconLeft = weather.getCurrentWeatherIcon();
-                currentWeatherIcon.setImage(setIcon(pathCurrentIconLeft));
-
-                String imageURL = getUrlOfBackgroundImage(weather.getCurrentCondition(),
-                        weather.getCurrentDateTime(), weather.getSunriseDateTime(),
-                        weather.getSunsetDateTime());
-                weatherBackground.setStyle("-fx-background-image: url('" + imageURL + "'); -fx-background-position: center; " +
-                        "-fx-background-size: cover;");
-
-                Vector<Integer> hourIndexes = forecastHours.getIndex(weather, "today");
-                Vector<Integer> hourIndexesNextDays = forecastHours.getIndex(weather, "nextDay");
-
-                loadWeatherForCurrentDayForNextHours(currentDayNextHoursWeather, hourIndexes, weather);
-                loadHoursDataForNextDays(weatherForNextDays, hourIndexesNextDays, weather);
             }
+            WeatherProvider weatherProvider = new WeatherProvider();
+            CurrentWeatherData currentWeather = weatherProvider.getCurrentWeather(userCityId);
+            HourlyWeatherForecastData hourlyWeatherForecast = weatherProvider.getHourlyWeather(userCityId);
+
+
+            cityName.setText(hourlyWeatherForecast.getCityName() + ", " + hourlyWeatherForecast.getCountryCode());
+            currentDate.setText(currentWeather.getCurrentDate());
+
+            currentCityNow.setText(Messages.NOW);
+            currentTempForCurrentCity.setText(currentWeather.getCurrentTemperature());
+            currentPressure.setText(Messages.PRESSURE + currentWeather.getCurrentPressure());
+            currentHumidity.setText(Messages.HUMIDITY + currentWeather.getCurrentHumidity());
+
+            String currentWeatherIconPath = currentWeather.getCurrentWeatherIcon();
+            currentWeatherIcon.setImage(setIcon(currentWeatherIconPath));
+
+            setBackgroundImage(currentWeather, weatherBackground);
+
+            ForecastHours forecastHours = new ForecastHours();
+            List<Integer> hourIndexes = forecastHours.getIndex(hourlyWeatherForecast, "today");
+            List<Integer> hourIndexesNextDays = forecastHours.getIndex(hourlyWeatherForecast, "nextDay");
+
+            loadWeatherForCurrentDayForNextHours(currentDayNextHoursWeather, hourIndexes, hourlyWeatherForecast);
+            loadHoursDataForNextDays(weatherForNextDays, hourIndexesNextDays, hourlyWeatherForecast);
+
 
         } catch (APIException e) {
             cityName.setText("Niepoprawne dane.");
@@ -110,15 +109,15 @@ public class ControllerFunctions {
             cityName.setText("Serwer nie odpowiada.");
 
         } catch (Exception excep) {
-            cityName.setText("Brak danych.");
+            cityName.setText("Brak danych o podanym mieście.");
         }
     }
 
     private void deletePreviousWeatherData(Label cityName,
-    Label currentTempForCurrentCity, Label currentDate, Label currentCityNow,
-    Label currentPressure, Label currentHumidity,
-    HBox currentDayNextHoursWeather, ImageView currentWeatherIcon,
-    GridPane weatherForNextDays, GridPane weatherBackground) {
+                                           Label currentTempForCurrentCity, Label currentDate, Label currentCityNow,
+                                           Label currentPressure, Label currentHumidity,
+                                           HBox currentDayNextHoursWeather, ImageView currentWeatherIcon,
+                                           GridPane weatherForNextDays, GridPane weatherBackground) {
         cityName.setText(null);
         currentTempForCurrentCity.setText(null);
         currentDate.setText(null);
@@ -132,150 +131,87 @@ public class ControllerFunctions {
     }
 
 
-    private static String getUrlOfBackgroundImage(int conditionId, String currentDateTime, String sunriseDateTime, String sunsetDateTime) {
+    private void setBackgroundImage(CurrentWeatherData weather, GridPane weatherBackground) {
 
-        double sunriseHour = Double.parseDouble(sunriseDateTime.substring(11, 13) + "." + sunriseDateTime.substring(14,
-                16) + sunriseDateTime.substring(17, 19));
-        double sunsetHour = Double.parseDouble(sunsetDateTime.substring(11, 13) + "." + sunsetDateTime.substring(14,
-                16) + sunsetDateTime.substring(17, 19));
-        double currentHour = Double.parseDouble(currentDateTime.substring(11, 13) + "." + currentDateTime.substring(14,
-                16) + currentDateTime.substring(17, 19));
+        DateTime dateTime = new DateTime(weather.getCurrentWeather());
+        String imageURL = ImagePathProvider.getBackgroundImagePath(dateTime, weather.getCurrentCondition());
 
-        String conditionImage;
+        weatherBackground.setStyle("-fx-background-image: url('" + imageURL + "'); -fx-background-position: center; " +
+                "-fx-background-size: cover;");
 
-        if ((currentHour > sunriseHour) && (currentHour < sunsetHour)) {
-            if ((conditionId >= 200) && (conditionId <= 232)) {
-                conditionImage = "/img/thunderstorm_day.jpg";
-            } else if ((conditionId >= 300) && (conditionId <= 531)) {
-                conditionImage = "/img/rain_day.jpg";
-            } else if ((conditionId >= 600) && (conditionId <= 622)) {
-                conditionImage = "/img/snow_day.jpg";
-            } else if ((conditionId >= 701) && (conditionId <= 781)) {
-                conditionImage = "/img/fog_day.jpg";
-            } else if ((conditionId >= 801) && (conditionId <= 804)) {
-                conditionImage = "/img/clouds_day.jpg";
-            } else if ((conditionId == 800)) {
-                conditionImage = "/img/sun.jpg";
-            } else conditionImage =  "";
-        } else {
-            if ((conditionId >= 200) && (conditionId <= 232)) {
-                conditionImage =  "/img/thunderstorm_night.jpg";
-            } else if ((conditionId >= 300) && (conditionId <= 531)) {
-                conditionImage = "/img/rain_night.jpg";
-            } else if ((conditionId >= 600) && (conditionId <= 622)) {
-                conditionImage = "/img/snow_night.jpg";
-            } else if ((conditionId >= 701) && (conditionId <= 781)) {
-                conditionImage = "/img/fog_night.jpg";
-            } else if ((conditionId >= 801) && (conditionId <= 804)) {
-                conditionImage = "/img/clouds_night.jpg";
-            } else if ((conditionId == 800)) {
-                conditionImage =  "/img/moon.jpg";
-            } else conditionImage = "";
-        }
-
-        return ControllerFunctions.class.getResource(conditionImage).toExternalForm();
     }
 
     private Image setIcon(String path) {
         return new Image(path);
     }
 
-    private void loadWeatherForCurrentDayForNextHours(HBox currentDayNextHoursWeather, Vector<Integer> hourIndexes, WeatherProvider weather) {
-        List<VBox> containerForHourData = new ArrayList<>();
-        List<Label> selectedHoursForCurrentDay = new ArrayList<>();
-        List<ImageView> hourlyIconForCurrentDay = new ArrayList<>();
-        List<Label> hourlyTemperatureForCurrentDay = new ArrayList<>();
-        List<Label> hourlyHumidityForCurrentDay = new ArrayList<>();
+    private void loadWeatherForCurrentDayForNextHours(HBox currentDayNextHoursWeather, List<Integer> hourIndexes,
+                                                      HourlyWeatherForecastData weather) {
 
-        for (int i = 0; i < hourIndexes.size(); i++) {
+        for (Integer hourIndex : hourIndexes) {
             VBox hourWeatherData = new VBox();
             hourWeatherData.setAlignment(Pos.CENTER);
             hourWeatherData.setPrefWidth(110);
-            containerForHourData.add(hourWeatherData);
 
             Label currentDayHour = new Label();
-            selectedHoursForCurrentDay.add(currentDayHour);
 
             Label hourlyTemperatureForCurrentDayLabel = new Label();
-            hourlyTemperatureForCurrentDay.add(hourlyTemperatureForCurrentDayLabel);
 
             Label hourlyHumidityForCurrentDayLabel = new Label();
-            hourlyHumidityForCurrentDay.add(hourlyHumidityForCurrentDayLabel);
 
             ImageView currentTimeWeatherIcon = new ImageView();
-            hourlyIconForCurrentDay.add(currentTimeWeatherIcon);
-            String pathDayIcon = weather.getHourlyWeatherIcon(hourIndexes.get(i));
+            String pathDayIcon = weather.getHourlyWeatherIcon(hourIndex);
             currentTimeWeatherIcon.setImage(setIcon(pathDayIcon));
 
-            hourWeatherData.getChildren().addAll(currentDayHour,currentTimeWeatherIcon,
+            hourWeatherData.getChildren().addAll(currentDayHour, currentTimeWeatherIcon,
                     hourlyTemperatureForCurrentDayLabel,
                     hourlyHumidityForCurrentDayLabel);
             currentDayNextHoursWeather.getChildren().add(hourWeatherData);
 
-            currentDayHour.setText(weather.getHourlyDateTime(hourIndexes.get(i)).substring(11, 16));
+            currentDayHour.setText(weather.getHourlyDateTime(hourIndex).substring(11, 16));
             currentDayHour.getStyleClass().add("label-text");
 
-            hourlyTemperatureForCurrentDayLabel.setText(weather.getHourlyTemperature(hourIndexes.get(i)));
+            hourlyTemperatureForCurrentDayLabel.setText(weather.getHourlyTemperature(hourIndex));
             hourlyTemperatureForCurrentDayLabel.getStyleClass().add("label-text");
 
-            hourlyHumidityForCurrentDayLabel.setText(weather.getHourlyHumidity(hourIndexes.get(i)));
+            hourlyHumidityForCurrentDayLabel.setText(weather.getHourlyHumidity(hourIndex));
             hourlyHumidityForCurrentDayLabel.getStyleClass().add("label-text");
 
         }
     }
 
-    private void loadHoursDataForNextDays(GridPane currentCityNextDaysWeather, Vector<Integer> hourIndexes,
-                                          WeatherProvider weather) {
-        List<VBox> nextDays = new ArrayList<>();
-        List<Label> nextDaysDate = new ArrayList<>();
-        List<HBox> oneDayDataList = new ArrayList<>();
-        List<VBox> hoursData = new ArrayList<>();
-        List<Label> selectedHours = new ArrayList<>();
-        List<ImageView> hourlyIcons = new ArrayList<>();
-        List<Label> hourlyTemperatureData = new ArrayList<>();
-        List<Label> hourlyHumidityData = new ArrayList<>();
-        List<Separator> separators = new ArrayList<>();
+    private void loadHoursDataForNextDays(GridPane currentCityNextDaysWeather, List<Integer> hourIndexes,
+                                          HourlyWeatherForecastData weather) {
 
         int index = 1;
+        final int NUMBER_OF_FORECASTING_NEXT_DAYS = 4;
+        final int NUMBER_OF_FORECASTING_TIMES_PER_DAY = 4;
 
-        for (int i = 1; i <= 4; i++) {
+        for (int i = 1; i <= NUMBER_OF_FORECASTING_NEXT_DAYS; i++) {
 
             VBox nextDay = new VBox();
             nextDay.setAlignment(Pos.CENTER);
             nextDay.setSpacing(5);
-            nextDays.add(nextDay);
 
             Label dayDate = new Label();
-            nextDaysDate.add(dayDate);
 
             HBox oneDayData = new HBox();
             oneDayData.setAlignment(Pos.CENTER);
 
-            oneDayDataList.add(oneDayData);
-
-            for (int j = 0; j < 4; j++) {
+            for (int j = 0; j < NUMBER_OF_FORECASTING_TIMES_PER_DAY; j++) {
                 VBox hourData = new VBox();
                 hourData.setAlignment(Pos.CENTER);
                 hourData.setPrefWidth(110);
                 hourData.setSpacing(5);
-                hoursData.add(hourData);
 
                 Label selectedHour = new Label();
-                selectedHours.add(selectedHour);
-
                 ImageView hourlyIcon = new ImageView();
-                hourlyIcons.add(hourlyIcon);
-
                 Label hourlyTemperature = new Label();
-                hourlyTemperatureData.add(hourlyTemperature);
-
                 Label hourlyHumidity = new Label();
-                hourlyHumidityData.add(hourlyHumidity);
 
                 Separator separator = new Separator();
                 separator.setOpacity(0.5);
                 separator.prefWidth(200.0);
-                separators.add(separator);
 
                 hourData.getChildren().addAll(selectedHour, hourlyIcon, hourlyTemperature, hourlyHumidity, separator);
                 oneDayData.getChildren().add(hourData);
@@ -310,22 +246,17 @@ public class ControllerFunctions {
         }
     }
 
-    private int getCityId(String userCity) {
-        int cityId = 0;
-        int iterator = 0;
+    private int getCityId(String givenCity) {
 
-        String[] splittedArray = null;
-        splittedArray = userCity.split(",");
-        userCity = splittedArray[0];
+        String userCity = givenCity.substring(0, givenCity.indexOf(","));
 
         if (citiesNamesWithCountryCodes.containsKey(userCity)) {
-            for (City i : citiesList) {
-                if (citiesList.get(iterator).getCityName().equals(userCity)) {
-                    cityId = citiesList.get(iterator).getCityId();
+            for (City city : citiesList) {
+                if (city.getCityName().equals(userCity)) {
+                    return city.getCityId();
                 }
-                iterator++;
             }
         }
-        return cityId;
+        return 0;
     }
 }

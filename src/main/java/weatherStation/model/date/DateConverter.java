@@ -1,4 +1,4 @@
-package weatherStation.model;
+package weatherStation.model.date;
 
 /**
  * Created by "Bartosz Chodyla" on 2020-08-26.
@@ -38,7 +38,7 @@ public class DateConverter {
             case "Sun":
                 return "Niedziela";
         }
-        return null;
+        return day;
     }
 
     private static String convertDateMonthName(String month) {
@@ -68,7 +68,7 @@ public class DateConverter {
             case "Dec":
                 return "grudnia";
         }
-        return null;
+        return month;
     }
 
 }

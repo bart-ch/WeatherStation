@@ -1,13 +1,18 @@
 package weatherStation.model;
 
-import java.util.Vector;
+import weatherStation.model.weather.HourlyWeatherForecastData;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Created by "Bartosz Chodyla" on 2020-08-27.
  */
 public class ForecastHours {
 
-    public String[] getNextHours(WeatherProvider weather) {
+    public String[] getNextHours(HourlyWeatherForecastData weather) {
+
         for (int i = 0; i < weather.getHourlyWeatherDataList().size(); i++) {
             String date = weather.getHourlyWeatherDataList().get(i).getDateTime().toString();
             if (date.substring(11, 13).equals("04")) {
@@ -18,25 +23,29 @@ public class ForecastHours {
                 return nextHours;
             }
         }
-        return null;
+        String[] nextHours = {};
+        return nextHours;
     }
 
-    public Vector<Integer> getIndex(WeatherProvider weatherProvider, String day) {
+    public List<Integer> getIndex(HourlyWeatherForecastData weather, String day) {
 
-        String todayDate = weatherProvider.getHourlyWeatherDataList().get(0).getDateTime().toString();
-        Vector<Integer> hourIndexes = new Vector<Integer>();
-        Vector<Integer> hourIndexesNextDays = new Vector<Integer>();
-        for (int i = 0; i < weatherProvider.getHourlyWeatherDataList().size(); i++) {
-            String dateToCheck = weatherProvider.getHourlyWeatherDataList().get(i).getDateTime().toString();
-            String[] nextHours = getNextHours(weatherProvider);
+        String todayDate = weather.getHourlyWeatherDataList().get(0).getDateTime().toString();
+        List<Integer> hourIndexes = new ArrayList<>();
+        List<Integer> hourIndexesNextDays = new ArrayList<>();
+        for (int i = 0; i < weather.getHourlyWeatherDataList().size(); i++) {
+            String dateToCheck = weather.getHourlyWeatherDataList().get(i).getDateTime().toString();
+            String[] nextHours = getNextHours(weather);
 
-            if (dateToCheck.substring(11, 13).equals(nextHours[0]) ||
-                    dateToCheck.substring(11, 13).equals(nextHours[1]) ||
-                    dateToCheck.substring(11, 13).equals(nextHours[2]) ||
-                    dateToCheck.substring(11, 13).equals(nextHours[3])) {
+            String forecastHours = dateToCheck.substring(11, 13);
 
-                if (dateToCheck.substring(0, 3).equals(todayDate.substring(0, 3))) hourIndexes.add(i);
-                else {
+            if (forecastHours.equals(nextHours[0]) ||
+                    forecastHours.equals(nextHours[1]) ||
+                    forecastHours.equals(nextHours[2]) ||
+                    forecastHours.equals(nextHours[3])) {
+
+                if (dateToCheck.substring(0, 3).equals(todayDate.substring(0, 3))) {
+                    hourIndexes.add(i);
+                } else {
                     hourIndexesNextDays.add(i);
                 }
             }
@@ -47,6 +56,6 @@ public class ForecastHours {
         } else if (day.equals("nextDay")) {
             return hourIndexesNextDays;
         }
-        return null;
+        return Collections.emptyList();
     }
 }
