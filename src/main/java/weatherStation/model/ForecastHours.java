@@ -1,16 +1,17 @@
 package weatherStation.model;
 
+import weatherStation.model.weather.Weather;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Vector;
 
 /**
  * Created by "Bartosz Chodyla" on 2020-08-27.
  */
 public class ForecastHours {
 
-    public String[] getNextHours(WeatherProvider weather) {
+    public String[] getNextHours(Weather weather) {
         for (int i = 0; i < weather.getHourlyWeatherDataList().size(); i++) {
             String date = weather.getHourlyWeatherDataList().get(i).getDateTime().toString();
             if (date.substring(11, 13).equals("04")) {
@@ -24,7 +25,7 @@ public class ForecastHours {
         return null;
     }
 
-    public List<Integer> getIndex(WeatherProvider weatherProvider, String day) {
+    public List<Integer> getIndex(Weather weatherProvider, String day) {
 
         String todayDate = weatherProvider.getHourlyWeatherDataList().get(0).getDateTime().toString();
         List<Integer> hourIndexes = new ArrayList<>();

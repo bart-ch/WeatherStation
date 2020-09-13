@@ -1,55 +1,31 @@
-package weatherStation.model;
+package weatherStation.model.weather;
 
-import net.aksingh.owmjapis.api.APIException;
-import net.aksingh.owmjapis.core.OWM;
 import net.aksingh.owmjapis.model.CurrentWeather;
 import net.aksingh.owmjapis.model.HourlyWeatherForecast;
-import net.aksingh.owmjapis.model.param.Weather;
 import net.aksingh.owmjapis.model.param.WeatherData;
-import weatherStation.Config;
 import weatherStation.model.date.DateConverter;
 
 import java.util.List;
 
 /**
- * Created by "Bartosz Chodyla" on 2020-08-24.
+ * Created by "Bartosz Chodyla" on 2020-09-12.
  */
-public class WeatherProvider {
+public class Weather {
 
-    private OWM owm = new OWM(new Config().getAPI_KEY());
     private CurrentWeather currentWeather;
     private HourlyWeatherForecast hourlyWeatherForecast;
-    private final String degreeSymbol = "\u00B0";
+    private final String DEGREE_SYMBOL = "\u00B0";
 
-    public WeatherProvider(int id) throws APIException {
-        owm.setUnit(OWM.Unit.METRIC);
-        owm.setLanguage(OWM.Language.POLISH);
-
-        currentWeather = getCurrentWeather(id);
-        hourlyWeatherForecast = getHourlyWeather(id);
+    public Weather(CurrentWeather currentWeather, HourlyWeatherForecast hourlyWeatherForecast) {
+        this.currentWeather = currentWeather;
+        this.hourlyWeatherForecast = hourlyWeatherForecast;
     }
-
-    private CurrentWeather getCurrentWeather(int cityId) throws APIException {
-        CurrentWeather currentWeatherQuery = owm.currentWeatherByCityId(cityId);
-        if (currentWeatherQuery.hasRespCode() && currentWeatherQuery.getRespCode() == 200) {
-            return currentWeatherQuery;
-        } else return null;
-    }
-
-    private HourlyWeatherForecast getHourlyWeather(int cityId) throws APIException {
-        return owm.hourlyWeatherForecastByCityId(cityId);
-    }
-
 
     public String getCurrentTemperature() {
         if(currentWeather.getMainData().hasTemp()) {
-           return roundTemperature(currentWeather.getMainData().getTemp()) + degreeSymbol + "C";
+            return roundTemperature(currentWeather.getMainData().getTemp()) + DEGREE_SYMBOL + "C";
         }
         return null;
-    }
-
-    private Double roundTemperature(Double temp) {
-        return Math.round(temp * 10.0) /10.0;
     }
 
     public String getCurrentPressure() {
@@ -64,6 +40,10 @@ public class WeatherProvider {
             return Math.round(currentWeather.getMainData().getHumidity()) + " %";
         }
         return null;
+    }
+
+    private Double roundTemperature(Double temp) {
+        return Math.round(temp * 10.0) /10.0;
     }
 
     public String getCityName() {
@@ -100,27 +80,27 @@ public class WeatherProvider {
     public List<WeatherData> getHourlyWeatherDataList() {
         return (hourlyWeatherForecast.hasDataList()) ? hourlyWeatherForecast.getDataList() : null;
     }
-    public WeatherData getHourlyWeatherData(int hourIndex) {
+
+    private WeatherData getHourlyWeatherData(int hourIndex) {
         return getHourlyWeatherDataList().get(hourIndex);
     }
+
     public String getHourlyDateTime(int hourIndex) {
         if(getHourlyWeatherData(hourIndex).hasDateTime()) {
             return getHourlyWeatherData(hourIndex).getDateTime().toString();
         }
         return null;
     }
-
-    public List<Weather> getWeatherListByHours(int hourIndex) {
-        if(getHourlyWeatherData(hourIndex).hasWeatherList()) {
-           return getHourlyWeatherData(hourIndex).getWeatherList();
-        }
-        return null;
-
+    public String getCurrentWeatherIcon() {
+        net.aksingh.owmjapis.model.param.Weather currentWeatherData = getCurrentWeatherList().get(0);
+        if (currentWeatherData.hasIconLink())
+            return currentWeatherData.getIconLink();
+        else return null;
     }
 
     public String getHourlyTemperature(int hourIndex) {
         if(getHourlyWeatherData(hourIndex).getMainData().hasTemp()) {
-            return roundTemperature(getHourlyWeatherData(hourIndex).getMainData().getTemp()) + degreeSymbol + "C";
+            return roundTemperature(getHourlyWeatherData(hourIndex).getMainData().getTemp()) + DEGREE_SYMBOL + "C";
         }
         return null;
     }
@@ -132,36 +112,30 @@ public class WeatherProvider {
         return null;
     }
 
-    public String getCurrentWeatherIcon() {
-        Weather currentWeatherData = getCurrentWeatherList().get(0);
-        if (currentWeatherData.hasIconLink())
-            return currentWeatherData.getIconLink();
-        else return null;
-    }
-
-    public List<Weather> getCurrentWeatherList() {
+    private List<net.aksingh.owmjapis.model.param.Weather> getCurrentWeatherList() {
         if (currentWeather.hasWeatherList())
             return currentWeather.getWeatherList();
         else return null;
     }
 
-    public List<Weather> getHourlyWeatherList(int hourIndex) {
+    private List<net.aksingh.owmjapis.model.param.Weather> getHourlyWeatherList(int hourIndex) {
         if(getHourlyWeatherData(hourIndex).hasWeatherList()) {
-           return getHourlyWeatherData(hourIndex).getWeatherList();
+            return getHourlyWeatherData(hourIndex).getWeatherList();
         }
         return null;
     }
 
     public int getCurrentCondition() {
-        Weather currentWeatherData = getCurrentWeatherList().get(0);
+        net.aksingh.owmjapis.model.param.Weather currentWeatherData = getCurrentWeatherList().get(0);
         return (currentWeatherData.hasConditionId()) ? currentWeatherData.getConditionId(): null;
     }
 
     public String getHourlyWeatherIcon(int hourIndex)  {
-        Weather hourlyWeatherData = getHourlyWeatherList(hourIndex).get(0);
+        net.aksingh.owmjapis.model.param.Weather hourlyWeatherData = getHourlyWeatherList(hourIndex).get(0);
         if (hourlyWeatherData.hasIconLink()) {
             return hourlyWeatherData.getIconLink();
         }
         return null;
     }
+
 }

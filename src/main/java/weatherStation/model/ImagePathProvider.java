@@ -3,7 +3,7 @@ package weatherStation.model;
 /**
  * Created by "Bartosz Chodyla" on 2020-09-12.
  */
-public class ImageProvider {
+public class ImagePathProvider {
 
     public static String getBackgroundImagePath(int conditionId, double currentHour, double sunriseHour,
                                                 double sunsetHour) {
@@ -44,4 +44,6 @@ public class ImageProvider {
 
         return imageURL;
     }
+
+
 }

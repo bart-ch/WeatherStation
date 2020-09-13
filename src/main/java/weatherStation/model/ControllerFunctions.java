@@ -14,11 +14,15 @@ import org.controlsfx.control.textfield.TextFields;
 import weatherStation.model.city.City;
 import weatherStation.model.city.CityProvider;
 import weatherStation.model.date.DateConverter;
+import weatherStation.model.weather.Weather;
+import weatherStation.model.weather.WeatherProvider;
 
 import java.net.NoRouteToHostException;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by "Bartosz Chodyla" on 2020-08-25.
@@ -26,15 +30,10 @@ import java.util.*;
 public class ControllerFunctions {
 
     private List<City> citiesList;
-    private CityProvider cityProvider;
     private Map<String, String> citiesNamesWithCountryCodes;
-    private ForecastHours forecastHours = new ForecastHours();
-
-    public ControllerFunctions() {
-        cityProvider = new CityProvider();
-    }
 
     public final void init(TextField currentCity, TextField desiredCity) {
+        CityProvider cityProvider = new CityProvider();
         citiesList = cityProvider.getCityList();
         enableAutoCompletionOfCityTextFields(currentCity, desiredCity);
     }
@@ -69,7 +68,10 @@ public class ControllerFunctions {
             if (userCityId <= 0) {
                 throw new Exception();
             }
-            WeatherProvider weather = new WeatherProvider(userCityId);
+            WeatherProvider weatherProvider = new WeatherProvider();
+            Weather weather = weatherProvider.getWeather(userCityId);
+
+
             cityName.setText(weather.getCityName() + ", " + weather.getCountryCode());
             currentDate.setText(weather.getCurrentDate());
 
@@ -78,12 +80,12 @@ public class ControllerFunctions {
             currentPressure.setText(Messages.PRESSURE + weather.getCurrentPressure());
             currentHumidity.setText(Messages.HUMIDITY + weather.getCurrentHumidity());
 
-            String pathCurrentIconLeft = weather.getCurrentWeatherIcon();
-            currentWeatherIcon.setImage(setIcon(pathCurrentIconLeft));
+            String currentWeatherIconPath = weather.getCurrentWeatherIcon();
+            currentWeatherIcon.setImage(setIcon(currentWeatherIconPath));
 
             setBackgroundImage(weather, weatherBackground);
 
-
+            ForecastHours forecastHours = new ForecastHours();
             List<Integer> hourIndexes = forecastHours.getIndex(weather, "today");
             List<Integer> hourIndexesNextDays = forecastHours.getIndex(weather, "nextDay");
 
@@ -126,7 +128,7 @@ public class ControllerFunctions {
     }
 
 
-    private void setBackgroundImage(WeatherProvider weather, GridPane weatherBackground) {
+    private void setBackgroundImage(Weather weather, GridPane weatherBackground) {
 
         int conditionId = weather.getCurrentCondition();
         String currentDateTime = weather.getCurrentDateTime();
@@ -140,7 +142,7 @@ public class ControllerFunctions {
         double currentHour = Double.parseDouble(currentDateTime.substring(11, 13) + "." + currentDateTime.substring(14,
                 16) + currentDateTime.substring(17, 19));
 
-        String imageURL = ImageProvider.getBackgroundImagePath(conditionId, currentHour, sunriseHour, sunsetHour);
+        String imageURL = ImagePathProvider.getBackgroundImagePath(conditionId, currentHour, sunriseHour, sunsetHour);
 
         weatherBackground.setStyle("-fx-background-image: url('" + imageURL + "'); -fx-background-position: center; " +
                 "-fx-background-size: cover;");
@@ -152,7 +154,7 @@ public class ControllerFunctions {
     }
 
     private void loadWeatherForCurrentDayForNextHours(HBox currentDayNextHoursWeather, List<Integer> hourIndexes,
-                                                      WeatherProvider weather) {
+                                                      Weather weather) {
 
         for (Integer hourIndex : hourIndexes) {
             VBox hourWeatherData = new VBox();
@@ -187,7 +189,7 @@ public class ControllerFunctions {
     }
 
     private void loadHoursDataForNextDays(GridPane currentCityNextDaysWeather, List<Integer> hourIndexes,
-                                          WeatherProvider weather) {
+                                          Weather weather) {
 
         int index = 1;
         final int NUMBER_OF_FORECASTING_NEXT_DAYS = 4;
