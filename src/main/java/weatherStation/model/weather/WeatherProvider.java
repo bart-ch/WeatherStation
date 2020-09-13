@@ -18,20 +18,22 @@ public class WeatherProvider {
         owm.setLanguage(OWM.Language.POLISH);
     }
 
-    public weatherStation.model.weather.Weather getWeather(int cityId) throws APIException {
+    public CurrentWeatherData getCurrentWeather(int cityId) throws APIException {
+
         CurrentWeather currentWeatherQuery = owm.currentWeatherByCityId(cityId);
+        CurrentWeatherData currentWeather = new CurrentWeatherData(currentWeatherQuery);
+
+        return currentWeather;
+
+    }
+
+    public HourlyWeatherForecastData getHourlyWeather(int cityId) throws APIException {
+
         HourlyWeatherForecast hourlyWeatherForecastQuery = owm.hourlyWeatherForecastByCityId(cityId);
+        HourlyWeatherForecastData hourlyWeather = new HourlyWeatherForecastData(hourlyWeatherForecastQuery);
 
-        weatherStation.model.weather.Weather weather =
-                new weatherStation.model.weather.Weather(currentWeatherQuery, hourlyWeatherForecastQuery);
+        return hourlyWeather;
 
-        if (currentWeatherQuery.hasRespCode() &&
-                currentWeatherQuery.getRespCode() == 200 &&
-                hourlyWeatherForecastQuery.hasRespCode()) {
-            return weather;
-        } else {
-            return null;
-        }
     }
 
 }

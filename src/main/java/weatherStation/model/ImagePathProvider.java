@@ -1,12 +1,21 @@
 package weatherStation.model;
 
+import weatherStation.model.date.DateTime;
+
 /**
  * Created by "Bartosz Chodyla" on 2020-09-12.
  */
 public class ImagePathProvider {
 
-    public static String getBackgroundImagePath(int conditionId, double currentHour, double sunriseHour,
-                                                double sunsetHour) {
+    public static String getBackgroundImagePath(DateTime dateTime, int conditionId) {
+
+        String currentDateTime = dateTime.getCurrentDateTime();
+        String sunriseDateTime = dateTime.getSunriseDateTime();
+        String sunsetDateTime = dateTime.getSunsetDateTime();
+
+        double sunriseHour = Double.parseDouble(currentDateTime);
+        double sunsetHour = Double.parseDouble(sunriseDateTime);
+        double currentHour = Double.parseDouble(sunsetDateTime);
 
         String conditionImage;
 
@@ -44,6 +53,5 @@ public class ImagePathProvider {
 
         return imageURL;
     }
-
 
 }

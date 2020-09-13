@@ -14,7 +14,9 @@ import org.controlsfx.control.textfield.TextFields;
 import weatherStation.model.city.City;
 import weatherStation.model.city.CityProvider;
 import weatherStation.model.date.DateConverter;
-import weatherStation.model.weather.Weather;
+import weatherStation.model.date.DateTime;
+import weatherStation.model.weather.CurrentWeatherData;
+import weatherStation.model.weather.HourlyWeatherForecastData;
 import weatherStation.model.weather.WeatherProvider;
 
 import java.net.NoRouteToHostException;
@@ -69,28 +71,29 @@ public class ControllerFunctions {
                 throw new Exception();
             }
             WeatherProvider weatherProvider = new WeatherProvider();
-            Weather weather = weatherProvider.getWeather(userCityId);
+            CurrentWeatherData currentWeather = weatherProvider.getCurrentWeather(userCityId);
+            HourlyWeatherForecastData hourlyWeatherForecast = weatherProvider.getHourlyWeather(userCityId);
 
 
-            cityName.setText(weather.getCityName() + ", " + weather.getCountryCode());
-            currentDate.setText(weather.getCurrentDate());
+            cityName.setText(hourlyWeatherForecast.getCityName() + ", " + hourlyWeatherForecast.getCountryCode());
+            currentDate.setText(currentWeather.getCurrentDate());
 
             currentCityNow.setText(Messages.NOW);
-            currentTempForCurrentCity.setText(weather.getCurrentTemperature());
-            currentPressure.setText(Messages.PRESSURE + weather.getCurrentPressure());
-            currentHumidity.setText(Messages.HUMIDITY + weather.getCurrentHumidity());
+            currentTempForCurrentCity.setText(currentWeather.getCurrentTemperature());
+            currentPressure.setText(Messages.PRESSURE + currentWeather.getCurrentPressure());
+            currentHumidity.setText(Messages.HUMIDITY + currentWeather.getCurrentHumidity());
 
-            String currentWeatherIconPath = weather.getCurrentWeatherIcon();
+            String currentWeatherIconPath = currentWeather.getCurrentWeatherIcon();
             currentWeatherIcon.setImage(setIcon(currentWeatherIconPath));
 
-            setBackgroundImage(weather, weatherBackground);
+            setBackgroundImage(currentWeather, weatherBackground);
 
             ForecastHours forecastHours = new ForecastHours();
-            List<Integer> hourIndexes = forecastHours.getIndex(weather, "today");
-            List<Integer> hourIndexesNextDays = forecastHours.getIndex(weather, "nextDay");
+            List<Integer> hourIndexes = forecastHours.getIndex(hourlyWeatherForecast, "today");
+            List<Integer> hourIndexesNextDays = forecastHours.getIndex(hourlyWeatherForecast, "nextDay");
 
-            loadWeatherForCurrentDayForNextHours(currentDayNextHoursWeather, hourIndexes, weather);
-            loadHoursDataForNextDays(weatherForNextDays, hourIndexesNextDays, weather);
+            loadWeatherForCurrentDayForNextHours(currentDayNextHoursWeather, hourIndexes, hourlyWeatherForecast);
+            loadHoursDataForNextDays(weatherForNextDays, hourIndexesNextDays, hourlyWeatherForecast);
 
 
         } catch (APIException e) {
@@ -128,21 +131,10 @@ public class ControllerFunctions {
     }
 
 
-    private void setBackgroundImage(Weather weather, GridPane weatherBackground) {
+    private void setBackgroundImage(CurrentWeatherData weather, GridPane weatherBackground) {
 
-        int conditionId = weather.getCurrentCondition();
-        String currentDateTime = weather.getCurrentDateTime();
-        String sunriseDateTime = weather.getSunriseDateTime();
-        String sunsetDateTime = weather.getSunsetDateTime();
-
-        double sunriseHour = Double.parseDouble(sunriseDateTime.substring(11, 13) + "." + sunriseDateTime.substring(14,
-                16) + sunriseDateTime.substring(17, 19));
-        double sunsetHour = Double.parseDouble(sunsetDateTime.substring(11, 13) + "." + sunsetDateTime.substring(14,
-                16) + sunsetDateTime.substring(17, 19));
-        double currentHour = Double.parseDouble(currentDateTime.substring(11, 13) + "." + currentDateTime.substring(14,
-                16) + currentDateTime.substring(17, 19));
-
-        String imageURL = ImagePathProvider.getBackgroundImagePath(conditionId, currentHour, sunriseHour, sunsetHour);
+        DateTime dateTime = new DateTime(weather.getCurrentWeather());
+        String imageURL = ImagePathProvider.getBackgroundImagePath(dateTime, weather.getCurrentCondition());
 
         weatherBackground.setStyle("-fx-background-image: url('" + imageURL + "'); -fx-background-position: center; " +
                 "-fx-background-size: cover;");
@@ -154,7 +146,7 @@ public class ControllerFunctions {
     }
 
     private void loadWeatherForCurrentDayForNextHours(HBox currentDayNextHoursWeather, List<Integer> hourIndexes,
-                                                      Weather weather) {
+                                                      HourlyWeatherForecastData weather) {
 
         for (Integer hourIndex : hourIndexes) {
             VBox hourWeatherData = new VBox();
@@ -189,7 +181,7 @@ public class ControllerFunctions {
     }
 
     private void loadHoursDataForNextDays(GridPane currentCityNextDaysWeather, List<Integer> hourIndexes,
-                                          Weather weather) {
+                                          HourlyWeatherForecastData weather) {
 
         int index = 1;
         final int NUMBER_OF_FORECASTING_NEXT_DAYS = 4;

@@ -1,6 +1,6 @@
 package weatherStation.model;
 
-import weatherStation.model.weather.Weather;
+import weatherStation.model.weather.HourlyWeatherForecastData;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -11,7 +11,8 @@ import java.util.List;
  */
 public class ForecastHours {
 
-    public String[] getNextHours(Weather weather) {
+    public String[] getNextHours(HourlyWeatherForecastData weather) {
+
         for (int i = 0; i < weather.getHourlyWeatherDataList().size(); i++) {
             String date = weather.getHourlyWeatherDataList().get(i).getDateTime().toString();
             if (date.substring(11, 13).equals("04")) {
@@ -22,17 +23,18 @@ public class ForecastHours {
                 return nextHours;
             }
         }
-        return null;
+        String[] nextHours = {};
+        return nextHours;
     }
 
-    public List<Integer> getIndex(Weather weatherProvider, String day) {
+    public List<Integer> getIndex(HourlyWeatherForecastData weather, String day) {
 
-        String todayDate = weatherProvider.getHourlyWeatherDataList().get(0).getDateTime().toString();
+        String todayDate = weather.getHourlyWeatherDataList().get(0).getDateTime().toString();
         List<Integer> hourIndexes = new ArrayList<>();
         List<Integer> hourIndexesNextDays = new ArrayList<>();
-        for (int i = 0; i < weatherProvider.getHourlyWeatherDataList().size(); i++) {
-            String dateToCheck = weatherProvider.getHourlyWeatherDataList().get(i).getDateTime().toString();
-            String[] nextHours = getNextHours(weatherProvider);
+        for (int i = 0; i < weather.getHourlyWeatherDataList().size(); i++) {
+            String dateToCheck = weather.getHourlyWeatherDataList().get(i).getDateTime().toString();
+            String[] nextHours = getNextHours(weather);
 
             String forecastHours = dateToCheck.substring(11, 13);
 
