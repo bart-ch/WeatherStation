@@ -63,9 +63,6 @@ public class MainWindowController implements Initializable {
     private Label currentDateForDesiredCityLabel;
 
     @FXML
-    private Label currentDateForCurrentCityLabel1;
-
-    @FXML
     private Label desiredCityNowLabel;
 
     @FXML

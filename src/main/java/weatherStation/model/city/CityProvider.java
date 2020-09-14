@@ -7,11 +7,12 @@ import com.google.gson.reflect.TypeToken;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.layout.Region;
-import weatherStation.model.city.City;
 
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -19,12 +20,11 @@ import java.util.List;
  * Created by "Bartosz Chodyla" on 2020-08-25.
  */
 public class CityProvider {
-    private List<City> cityList;
 
-    private void loadJsonFile() {
+    public List<City> getCityListFromJsonFile(String fileName) {
 
         try {
-            InputStream inputStream = getClass().getClassLoader().getResourceAsStream("city.list.min.json");
+            InputStream inputStream = getClass().getClassLoader().getResourceAsStream(fileName);
 
             JsonArray jsonArray = JsonParser.parseReader(new InputStreamReader(inputStream)).getAsJsonArray();
 
@@ -33,17 +33,14 @@ public class CityProvider {
             }.getType();
             List<City> cityList = gson.fromJson(jsonArray, listType);
 
-            this.cityList = cityList;
+            return cityList;
 
-        } catch (Exception e) {
+        } catch (NullPointerException e) {
             handleCityFileException();
+            return Collections.emptyList();
         }
     }
 
-    public List<City> getCityList() {
-        loadJsonFile();
-        return cityList;
-    }
 
     private void handleCityFileException() {
         Alert alert = new Alert(Alert.AlertType.ERROR, "Nie udało się wczytać pliku posiadającego listę "

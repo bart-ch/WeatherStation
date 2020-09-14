@@ -2,6 +2,8 @@ package weatherStation.model.date;
 
 import net.aksingh.owmjapis.model.CurrentWeather;
 
+import java.time.LocalDateTime;
+
 /**
  * Created by "Bartosz Chodyla" on 2020-09-13.
  */

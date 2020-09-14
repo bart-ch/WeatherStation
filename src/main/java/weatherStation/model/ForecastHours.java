@@ -11,7 +11,7 @@ import java.util.List;
  */
 public class ForecastHours {
 
-    public String[] getNextHours(HourlyWeatherForecastData weather) {
+    private String[] getNextHours(HourlyWeatherForecastData weather) {
 
         for (int i = 0; i < weather.getHourlyWeatherDataList().size(); i++) {
             String date = weather.getHourlyWeatherDataList().get(i).getDateTime().toString();

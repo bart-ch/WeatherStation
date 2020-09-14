@@ -36,7 +36,7 @@ public class ControllerFunctions {
 
     public final void init(TextField currentCity, TextField desiredCity) {
         CityProvider cityProvider = new CityProvider();
-        citiesList = cityProvider.getCityList();
+        citiesList = cityProvider.getCityListFromJsonFile("city.list.min.json");
         enableAutoCompletionOfCityTextFields(currentCity, desiredCity);
     }
 
@@ -83,8 +83,8 @@ public class ControllerFunctions {
             currentPressure.setText(Messages.PRESSURE + currentWeather.getCurrentPressure());
             currentHumidity.setText(Messages.HUMIDITY + currentWeather.getCurrentHumidity());
 
-            String currentWeatherIconPath = currentWeather.getCurrentWeatherIcon();
-            currentWeatherIcon.setImage(setIcon(currentWeatherIconPath));
+            String currentWeatherIconLink = currentWeather.getCurrentWeatherIconLink();
+            currentWeatherIcon.setImage(setIcon(currentWeatherIconLink));
 
             setBackgroundImage(currentWeather, weatherBackground);
 
