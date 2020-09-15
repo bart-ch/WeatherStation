@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class MockRepository {
+public class WeatherDataStub {
 
     public static CurrentWeather getCurrentWeather() {
 
@@ -35,7 +35,7 @@ public class MockRepository {
         List<Weather> list = Collections.singletonList(weather);
 
         return new WeatherData(1,mainData, new Temp(), 1002.0, 49.0, list, new Cloud(),
-                new Wind(), new System(), "2014-07-23 09:00:00");
+                new Wind(), new System(), "2018-06-21 10:00:00");
     }
 
     private static Weather getWeather() {
@@ -51,12 +51,12 @@ public class MockRepository {
 
     private static Coord getCoord() {
 
-        return new Coord(35.00, 139.00);
+        return new Coord(40.00, 100.00);
     }
 
     public static HourlyWeatherForecast getHourlyWeatherForecast() {
 
-        City cityData = new City(1, "London", getCoord(), "GB", 109876l);
+        City cityData = new City(1, "Warszawa", getCoord(), "PL", 800l);
         return new HourlyWeatherForecast("200", 0.0045, cityData, 40, getWeatherDataList());
     }
 

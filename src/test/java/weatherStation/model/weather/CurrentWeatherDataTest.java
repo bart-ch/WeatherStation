@@ -1,15 +1,12 @@
 package weatherStation.model.weather;
 
-import net.aksingh.owmjapis.api.APIException;
 import net.aksingh.owmjapis.model.CurrentWeather;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import weatherStation.MockRepository;
+import weatherStation.WeatherDataStub;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.mock;
 
 /**
  * Created by "Bartosz Chodyla" on 2020-09-14.
@@ -17,16 +14,13 @@ import static org.mockito.Mockito.mock;
 public class CurrentWeatherDataTest {
 
     private CurrentWeather currentWeather;
-    private WeatherProvider weatherProvider;
     private CurrentWeatherData currentWeatherData;
 
     @BeforeEach
-    void setUp() throws APIException {
+    void setUp() {
 
-        currentWeather = MockRepository.getCurrentWeather();
-        weatherProvider = mock(WeatherProvider.class);
+        currentWeather = WeatherDataStub.getCurrentWeather();
         currentWeatherData = new CurrentWeatherData(currentWeather);
-        given(weatherProvider.getCurrentWeather(10)).willReturn(currentWeatherData);
     }
 
     @Test
