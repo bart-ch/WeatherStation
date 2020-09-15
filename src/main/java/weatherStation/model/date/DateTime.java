@@ -15,7 +15,7 @@ public class DateTime {
         this.currentWeather = currentWeather;
     }
 
-    public String getCurrentDateTime() {
+    public String getCurrentTime() {
         if (currentWeather.hasDateTime()) {
             String currentDateTime = currentWeather.getDateTime().toString();
             String time = currentDateTime.substring(11, 13) + "." + currentDateTime.substring(14, 16)
@@ -27,7 +27,7 @@ public class DateTime {
 
     }
 
-    public String getSunsetDateTime() {
+    public String getSunsetTime() {
         if (currentWeather.getSystemData().hasSunsetDateTime()) {
             String sunsetDateTime = currentWeather.getSystemData().getSunsetDateTime().toString();
             String time = sunsetDateTime.substring(11, 13) + "." + sunsetDateTime.substring(14, 16)
@@ -38,7 +38,7 @@ public class DateTime {
         }
     }
 
-    public String getSunriseDateTime() {
+    public String getSunriseTime() {
         if (currentWeather.getSystemData().hasSunriseDateTime()) {
             String sunriseDateTime = currentWeather.getSystemData().getSunriseDateTime().toString();
             String time = sunriseDateTime.substring(11, 13) + "." + sunriseDateTime.substring(14, 16)

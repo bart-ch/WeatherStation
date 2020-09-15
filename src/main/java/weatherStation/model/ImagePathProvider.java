@@ -9,9 +9,9 @@ public class ImagePathProvider {
 
     public static String getBackgroundImagePath(DateTime dateTime, int conditionId) {
 
-        String currentDateTime = dateTime.getCurrentDateTime();
-        String sunriseDateTime = dateTime.getSunriseDateTime();
-        String sunsetDateTime = dateTime.getSunsetDateTime();
+        String currentDateTime = dateTime.getCurrentTime();
+        String sunriseDateTime = dateTime.getSunriseTime();
+        String sunsetDateTime = dateTime.getSunsetTime();
 
         double sunriseHour = Double.parseDouble(currentDateTime);
         double sunsetHour = Double.parseDouble(sunriseDateTime);
