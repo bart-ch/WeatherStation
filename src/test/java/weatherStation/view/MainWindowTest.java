@@ -1,4 +1,4 @@
-package weatherStation.model;
+package weatherStation.view;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -18,9 +18,13 @@ import org.testfx.matcher.control.LabeledMatchers;
 import java.io.IOException;
 
 
-class ControllerFunctionsTest extends ApplicationTest {
+/**
+ * Created by "Bartosz Chodyla" on 2020-09-16.
+ */
+public class MainWindowTest extends ApplicationTest {
 
     private TextField currentCity;
+    private TextField desiredCity;
 
     @Override
     public void start(Stage stage) {
@@ -42,27 +46,11 @@ class ControllerFunctionsTest extends ApplicationTest {
         stage.show();
     }
 
-    @BeforeEach
-    void cleanUpTextFields() {
 
-        currentCity = lookup("#currentCityTextField").query();
-        currentCity.clear();
-    }
-
-
-    @ParameterizedTest
-    @ValueSource(strings = {"", "Warswa,PL"})
-    void shouldShowErrorMessageWhenCityIsNotValid(String cityName) {
-
-        // given
-        Button button = lookup(".button").query();
-        currentCity.setText(cityName);
-
-        //when
-        clickOn(button);
+    @Test
+    void mainWindowShouldOpen() {
 
         //then
-        FxAssert.verifyThat("#currentCityLabel", LabeledMatchers.hasText("Brak danych o podanym mieście."));
+        FxAssert.verifyThat(window("Wakacyjna stacja pogodowa"), WindowMatchers.isShowing());
     }
-
 }

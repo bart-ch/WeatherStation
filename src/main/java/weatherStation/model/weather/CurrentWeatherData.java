@@ -69,4 +69,5 @@ public class CurrentWeatherData {
     public CurrentWeather getCurrentWeather() {
         return currentWeather;
     }
+
 }

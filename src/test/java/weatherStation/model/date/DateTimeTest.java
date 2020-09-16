@@ -17,14 +17,12 @@ import static org.hamcrest.MatcherAssert.assertThat;
 public class DateTimeTest {
 
     private CurrentWeather currentWeather;
-    private CurrentWeatherData currentWeatherData;
     private DateTime dateTime;
 
     @BeforeEach
     void setUp() {
 
         currentWeather = WeatherDataStub.getCurrentWeather();
-        currentWeatherData = new CurrentWeatherData(currentWeather);
         dateTime = new DateTime(currentWeather);
     }
 

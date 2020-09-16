@@ -17,41 +17,39 @@ public class ImagePathProvider {
         double sunsetHour = Double.parseDouble(sunriseDateTime);
         double currentHour = Double.parseDouble(sunsetDateTime);
 
-        String conditionImage;
+        String conditionImageURL;
 
         if ((currentHour > sunriseHour) && (currentHour < sunsetHour)) {
             if ((conditionId >= 200) && (conditionId <= 232)) {
-                conditionImage = "/img/thunderstorm_day.jpg";
+                conditionImageURL = "/img/thunderstorm_day.jpg";
             } else if ((conditionId >= 300) && (conditionId <= 531)) {
-                conditionImage = "/img/rain_day.jpg";
+                conditionImageURL = "/img/rain_day.jpg";
             } else if ((conditionId >= 600) && (conditionId <= 622)) {
-                conditionImage = "/img/snow_day.jpg";
+                conditionImageURL = "/img/snow_day.jpg";
             } else if ((conditionId >= 701) && (conditionId <= 781)) {
-                conditionImage = "/img/fog_day.jpg";
+                conditionImageURL = "/img/fog_day.jpg";
             } else if ((conditionId >= 801) && (conditionId <= 804)) {
-                conditionImage = "/img/clouds_day.jpg";
+                conditionImageURL = "/img/clouds_day.jpg";
             } else if ((conditionId == 800)) {
-                conditionImage = "/img/sun.jpg";
-            } else conditionImage = "";
+                conditionImageURL = "/img/sun.jpg";
+            } else conditionImageURL = "";
         } else {
             if ((conditionId >= 200) && (conditionId <= 232)) {
-                conditionImage = "/img/thunderstorm_night.jpg";
+                conditionImageURL = "/img/thunderstorm_night.jpg";
             } else if ((conditionId >= 300) && (conditionId <= 531)) {
-                conditionImage = "/img/rain_night.jpg";
+                conditionImageURL = "/img/rain_night.jpg";
             } else if ((conditionId >= 600) && (conditionId <= 622)) {
-                conditionImage = "/img/snow_night.jpg";
+                conditionImageURL = "/img/snow_night.jpg";
             } else if ((conditionId >= 701) && (conditionId <= 781)) {
-                conditionImage = "/img/fog_night.jpg";
+                conditionImageURL = "/img/fog_night.jpg";
             } else if ((conditionId >= 801) && (conditionId <= 804)) {
-                conditionImage = "/img/clouds_night.jpg";
+                conditionImageURL = "/img/clouds_night.jpg";
             } else if ((conditionId == 800)) {
-                conditionImage = "/img/moon.jpg";
-            } else conditionImage = "";
+                conditionImageURL = "/img/moon.jpg";
+            } else conditionImageURL = "";
         }
 
-        String imageURL = ControllerFunctions.class.getResource(conditionImage).toExternalForm();
-
-        return imageURL;
+        return conditionImageURL;
     }
 
 }

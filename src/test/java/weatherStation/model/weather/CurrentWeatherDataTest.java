@@ -1,5 +1,6 @@
 package weatherStation.model.weather;
 
+import javafx.scene.layout.VBox;
 import net.aksingh.owmjapis.model.CurrentWeather;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

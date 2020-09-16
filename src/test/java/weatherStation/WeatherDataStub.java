@@ -57,10 +57,10 @@ public class WeatherDataStub {
     public static HourlyWeatherForecast getHourlyWeatherForecast() {
 
         City cityData = new City(1, "Warszawa", getCoord(), "PL", 800l);
-        return new HourlyWeatherForecast("200", 0.0045, cityData, 40, getWeatherDataList());
+        return new HourlyWeatherForecast("200", 0.0045, cityData, 40, getHourlyWeatherDataList());
     }
 
-    private static List<WeatherData> getWeatherDataList() {
+    private static List<WeatherData> getHourlyWeatherDataList() {
 
         int i = 1;
         List<WeatherData> list = new ArrayList<>();

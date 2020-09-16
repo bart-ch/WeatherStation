@@ -67,7 +67,7 @@ public class ControllerFunctions {
         int userCityId = getCityId(userCity);
 
         try {
-            if (userCityId <= 0) {
+            if (userCityId <= 0 || userCity.isEmpty()) {
                 throw new Exception();
             }
             WeatherProvider weatherProvider = new WeatherProvider();
@@ -136,7 +136,9 @@ public class ControllerFunctions {
         DateTime dateTime = new DateTime(weather.getCurrentWeather());
         String imageURL = ImagePathProvider.getBackgroundImagePath(dateTime, weather.getCurrentCondition());
 
-        weatherBackground.setStyle("-fx-background-image: url('" + imageURL + "'); -fx-background-position: center; " +
+        String imageExternalForm = ControllerFunctions.class.getResource(imageURL).toExternalForm();
+
+        weatherBackground.setStyle("-fx-background-image: url('" + imageExternalForm + "'); -fx-background-position: center; " +
                 "-fx-background-size: cover;");
 
     }
@@ -248,7 +250,8 @@ public class ControllerFunctions {
 
     private int getCityId(String givenCity) {
 
-        String userCity = givenCity.substring(0, givenCity.indexOf(","));
+        String[] userCityNameWithCountryCode = givenCity.split(",");
+        String userCity = userCityNameWithCountryCode[0];
 
         if (citiesNamesWithCountryCodes.containsKey(userCity)) {
             for (City city : citiesList) {
