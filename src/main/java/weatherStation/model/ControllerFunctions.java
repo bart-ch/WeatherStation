@@ -110,6 +110,7 @@ public class ControllerFunctions {
 
         } catch (Exception excep) {
             cityName.setText("Brak danych o podanym mieście.");
+            System.out.println(excep.toString());
         }
     }
 

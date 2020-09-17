@@ -1,4 +1,4 @@
-package weatherStation;
+package weatherStation.model.weather;
 
 import net.aksingh.owmjapis.model.CurrentWeather;
 import net.aksingh.owmjapis.model.HourlyWeatherForecast;

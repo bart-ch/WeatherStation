@@ -3,17 +3,11 @@ package weatherStation.view;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
 import org.testfx.api.FxAssert;
 import org.testfx.framework.junit5.ApplicationTest;
 import org.testfx.matcher.base.WindowMatchers;
-import org.testfx.matcher.control.LabeledMatchers;
 
 import java.io.IOException;
 
@@ -23,8 +17,6 @@ import java.io.IOException;
  */
 public class MainWindowTest extends ApplicationTest {
 
-    private TextField currentCity;
-    private TextField desiredCity;
 
     @Override
     public void start(Stage stage) {
