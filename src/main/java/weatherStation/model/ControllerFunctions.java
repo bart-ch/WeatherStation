@@ -68,7 +68,7 @@ public class ControllerFunctions {
 
         try {
             if (userCityId <= 0 || userCity.isEmpty()) {
-                throw new Exception();
+                throw new IllegalArgumentException();
             }
             WeatherProvider weatherProvider = new WeatherProvider();
             CurrentWeatherData currentWeather = weatherProvider.getCurrentWeather(userCityId);
@@ -108,7 +108,7 @@ public class ControllerFunctions {
         } catch (SocketTimeoutException exce) {
             cityName.setText("Serwer nie odpowiada.");
 
-        } catch (Exception excep) {
+        } catch (IllegalArgumentException excep) {
             cityName.setText("Brak danych o podanym mieście.");
             System.out.println(excep.toString());
         }

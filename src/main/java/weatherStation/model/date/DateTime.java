@@ -2,7 +2,10 @@ package weatherStation.model.date;
 
 import net.aksingh.owmjapis.model.CurrentWeather;
 
-import java.time.LocalDateTime;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by "Bartosz Chodyla" on 2020-09-13.
