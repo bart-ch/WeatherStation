@@ -36,7 +36,7 @@ public class ControllerFunctions {
 
     public final void init(TextField currentCity, TextField desiredCity) {
         CityProvider cityProvider = new CityProvider();
-        citiesList = cityProvider.getCityList();
+        citiesList = cityProvider.getCityListFromJsonFile("city.list.min.json");
         enableAutoCompletionOfCityTextFields(currentCity, desiredCity);
     }
 
@@ -67,8 +67,8 @@ public class ControllerFunctions {
         int userCityId = getCityId(userCity);
 
         try {
-            if (userCityId <= 0) {
-                throw new Exception();
+            if (userCityId <= 0 || userCity.isEmpty()) {
+                throw new IllegalArgumentException();
             }
             WeatherProvider weatherProvider = new WeatherProvider();
             CurrentWeatherData currentWeather = weatherProvider.getCurrentWeather(userCityId);
@@ -83,8 +83,8 @@ public class ControllerFunctions {
             currentPressure.setText(Messages.PRESSURE + currentWeather.getCurrentPressure());
             currentHumidity.setText(Messages.HUMIDITY + currentWeather.getCurrentHumidity());
 
-            String currentWeatherIconPath = currentWeather.getCurrentWeatherIcon();
-            currentWeatherIcon.setImage(setIcon(currentWeatherIconPath));
+            String currentWeatherIconLink = currentWeather.getCurrentWeatherIconLink();
+            currentWeatherIcon.setImage(setIcon(currentWeatherIconLink));
 
             setBackgroundImage(currentWeather, weatherBackground);
 
@@ -108,8 +108,9 @@ public class ControllerFunctions {
         } catch (SocketTimeoutException exce) {
             cityName.setText("Serwer nie odpowiada.");
 
-        } catch (Exception excep) {
+        } catch (IllegalArgumentException excep) {
             cityName.setText("Brak danych o podanym mieście.");
+            System.out.println(excep.toString());
         }
     }
 
@@ -136,7 +137,9 @@ public class ControllerFunctions {
         DateTime dateTime = new DateTime(weather.getCurrentWeather());
         String imageURL = ImagePathProvider.getBackgroundImagePath(dateTime, weather.getCurrentCondition());
 
-        weatherBackground.setStyle("-fx-background-image: url('" + imageURL + "'); -fx-background-position: center; " +
+        String imageExternalForm = ControllerFunctions.class.getResource(imageURL).toExternalForm();
+
+        weatherBackground.setStyle("-fx-background-image: url('" + imageExternalForm + "'); -fx-background-position: center; " +
                 "-fx-background-size: cover;");
 
     }
@@ -248,7 +251,8 @@ public class ControllerFunctions {
 
     private int getCityId(String givenCity) {
 
-        String userCity = givenCity.substring(0, givenCity.indexOf(","));
+        String[] userCityNameWithCountryCode = givenCity.split(",");
+        String userCity = userCityNameWithCountryCode[0];
 
         if (citiesNamesWithCountryCodes.containsKey(userCity)) {
             for (City city : citiesList) {

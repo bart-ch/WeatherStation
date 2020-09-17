@@ -48,8 +48,8 @@ public class CurrentWeatherData {
         return null;
     }
 
-    public String getCurrentWeatherIcon() {
-        net.aksingh.owmjapis.model.param.Weather currentWeatherData = getCurrentWeatherList().get(0);
+    public String getCurrentWeatherIconLink() {
+        Weather currentWeatherData = getCurrentWeatherList().get(0);
         if (currentWeatherData.hasIconLink())
             return currentWeatherData.getIconLink();
         else return null;
@@ -69,4 +69,5 @@ public class CurrentWeatherData {
     public CurrentWeather getCurrentWeather() {
         return currentWeather;
     }
+
 }
