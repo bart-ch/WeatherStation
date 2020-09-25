@@ -71,6 +71,7 @@ public class ControllerFunctions {
                 throw new IllegalArgumentException();
             }
             WeatherProvider weatherProvider = new WeatherProvider();
+
             CurrentWeatherData currentWeather = weatherProvider.getCurrentWeather(userCityId);
             HourlyWeatherForecastData hourlyWeatherForecast = weatherProvider.getHourlyWeather(userCityId);
 
@@ -128,7 +129,7 @@ public class ControllerFunctions {
 
     private void setBackgroundImage(CurrentWeatherData weather, GridPane weatherBackground) {
 
-        DateTime dateTime = new DateTime(weather.getCurrentWeather());
+        DateTime dateTime = new DateTime(weather);
         String imageURL = ImagePathProvider.getBackgroundImagePath(dateTime, weather.getCurrentCondition());
 
         String imageExternalForm = ControllerFunctions.class.getResource(imageURL).toExternalForm();

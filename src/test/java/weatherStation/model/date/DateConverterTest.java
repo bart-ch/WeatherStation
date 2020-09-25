@@ -24,4 +24,32 @@ public class DateConverterTest {
         assertThat(result, is(expected));
     }
 
+    @Test
+    void shouldReturnTranslatedDateWhenStartsWithWhiteSpace() {
+
+        //given
+        String englishDateTime = " Tue Sep 15 05:00:00 CEST 2020";
+        String expected = "Wtorek, 15 września 2020";
+
+        //when
+        String result = DateConverter.convertDateToPolish(englishDateTime);
+
+        //then
+        assertThat(result, is(expected));
+    }
+
+    @Test
+    void shouldReturnErrorMessageIfDateIsEmpty() {
+
+        //given
+        String englishDateTime = "";
+        String expected = "Błąd podczas pobierania daty.";
+
+        //when
+        String result = DateConverter.convertDateToPolish(englishDateTime);
+
+        //then
+        assertThat(result, is(expected));
+    }
+
 }

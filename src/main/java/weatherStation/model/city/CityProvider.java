@@ -42,8 +42,6 @@ public class CityProvider {
         List<City> cityList = gson.fromJson(jsonArray, listType);
 
         return cityList;
-
-
     }
 
 

@@ -1,49 +1,51 @@
 package weatherStation.model.date;
 
 import net.aksingh.owmjapis.model.CurrentWeather;
+import weatherStation.model.weather.CurrentWeatherData;
 
 /**
  * Created by "Bartosz Chodyla" on 2020-09-13.
  */
 public class DateTime {
 
-    private CurrentWeather currentWeather;
+    private CurrentWeatherData currentWeather;
 
-    public DateTime(CurrentWeather currentWeather) {
+    public DateTime(CurrentWeatherData currentWeather) {
         this.currentWeather = currentWeather;
     }
 
     public String getCurrentTime() {
-        if (currentWeather.hasDateTime()) {
-            String currentDateTime = currentWeather.getDateTime().toString();
-            String time = currentDateTime.substring(11, 13) + "." + currentDateTime.substring(14, 16)
-                    + currentDateTime.substring(17, 19);
-            return time;
-        } else {
-            return null;
-        }
 
+        String currentDateTime = currentWeather.getCurrentDateTime();
+        if (!currentDateTime.isEmpty()) {
+            String currentTime = currentDateTime.substring(11, 13) + "." + currentDateTime.substring(14, 16)
+                    + currentDateTime.substring(17, 19);
+            return currentTime;
+        } else {
+            return "";
+        }
     }
 
     public String getSunsetTime() {
-        if (currentWeather.getSystemData().hasSunsetDateTime()) {
-            String sunsetDateTime = currentWeather.getSystemData().getSunsetDateTime().toString();
-            String time = sunsetDateTime.substring(11, 13) + "." + sunsetDateTime.substring(14, 16)
+
+        String sunsetDateTime = currentWeather.getSunsetDateTime();
+        if (!sunsetDateTime.isEmpty()) {
+            String sunsetTime = sunsetDateTime.substring(11, 13) + "." + sunsetDateTime.substring(14, 16)
                     + sunsetDateTime.substring(17, 19);
-            return time;
+            return sunsetTime;
         } else {
-            return null;
+            return "";
         }
     }
 
     public String getSunriseTime() {
-        if (currentWeather.getSystemData().hasSunriseDateTime()) {
-            String sunriseDateTime = currentWeather.getSystemData().getSunriseDateTime().toString();
-            String time = sunriseDateTime.substring(11, 13) + "." + sunriseDateTime.substring(14, 16)
+        String sunriseDateTime = currentWeather.getSunriseDateTime();
+        if (!sunriseDateTime.isEmpty()) {
+            String sunriseTime = sunriseDateTime.substring(11, 13) + "." + sunriseDateTime.substring(14, 16)
                     + sunriseDateTime.substring(17, 19);
-            return time;
+            return sunriseTime;
         } else {
-            return null;
+            return "";
         }
     }
 }

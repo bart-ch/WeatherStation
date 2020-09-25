@@ -69,8 +69,32 @@ public class CurrentWeatherData {
         return (currentWeatherData.hasConditionId()) ? currentWeatherData.getConditionId() : 0;
     }
 
-    public CurrentWeather getCurrentWeather() {
-        return currentWeather;
+    public String getCurrentDateTime() {
+        if (currentWeather.hasDateTime()) {
+            String currentDateTime = currentWeather.getDateTime().toString();
+            return currentDateTime;
+        } else {
+            return "";
+        }
+
+    }
+
+    public String getSunsetDateTime() {
+        if (currentWeather.getSystemData().hasSunsetDateTime()) {
+            String sunsetDateTime = currentWeather.getSystemData().getSunsetDateTime().toString();
+            return sunsetDateTime;
+        } else {
+            return "";
+        }
+    }
+
+    public String getSunriseDateTime() {
+        if (currentWeather.getSystemData().hasSunriseDateTime()) {
+            String sunriseDateTime = currentWeather.getSystemData().getSunriseDateTime().toString();
+            return sunriseDateTime;
+        } else {
+            return "";
+        }
     }
 
 }

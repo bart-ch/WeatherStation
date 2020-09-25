@@ -4,7 +4,6 @@ import net.aksingh.owmjapis.model.CurrentWeather;
 import net.aksingh.owmjapis.model.HourlyWeatherForecast;
 import net.aksingh.owmjapis.model.param.System;
 import net.aksingh.owmjapis.model.param.*;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
