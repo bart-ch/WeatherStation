@@ -21,23 +21,29 @@ import java.util.List;
 public class CityProvider {
 
     public List<City> getCityListFromJsonFile(String fileName) {
-
+        InputStream inputStream;
         try {
-            InputStream inputStream = getClass().getClassLoader().getResourceAsStream(fileName);
-
-            JsonArray jsonArray = JsonParser.parseReader(new InputStreamReader(inputStream)).getAsJsonArray();
-
-            Gson gson = new Gson();
-            Type listType = new TypeToken<List<City>>() {
-            }.getType();
-            List<City> cityList = gson.fromJson(jsonArray, listType);
-
-            return cityList;
+            inputStream = getClass().getClassLoader().getResourceAsStream(fileName);
 
         } catch (NullPointerException e) {
             handleCityFileException();
             return Collections.emptyList();
         }
+        if (inputStream == null) {
+            handleCityFileException();
+            return Collections.emptyList();
+        }
+
+        JsonArray jsonArray = JsonParser.parseReader(new InputStreamReader(inputStream)).getAsJsonArray();
+
+        Gson gson = new Gson();
+        Type listType = new TypeToken<List<City>>() {
+        }.getType();
+        List<City> cityList = gson.fromJson(jsonArray, listType);
+
+        return cityList;
+
+
     }
 
 

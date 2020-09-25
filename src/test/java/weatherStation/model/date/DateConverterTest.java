@@ -15,13 +15,13 @@ public class DateConverterTest {
 
         //given
         String englishDateTime = "Tue Sep 15 05:00:00 CEST 2020";
-        String translatedDate = "Wtorek, 15 września 2020";
+        String expected = "Wtorek, 15 września 2020";
 
         //when
         String result = DateConverter.convertDateToPolish(englishDateTime);
 
         //then
-        assertThat(result, is(translatedDate));
+        assertThat(result, is(expected));
     }
 
 }

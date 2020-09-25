@@ -5,7 +5,7 @@ package weatherStation;
  */
 public class Config {
 
-    private final String API_KEY = "YOUR_API_KEY";
+    private final String API_KEY = "cfbe0478744590fa872c4b2b9fb4e870";
 
     public String getAPI_KEY() {
         return API_KEY;

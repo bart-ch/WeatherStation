@@ -53,7 +53,7 @@ public class HourlyWeatherForecastDataTest {
         String hourlyTemperature = hourlyWeatherForecastData.getHourlyTemperature(hourIndex);
 
         //then
-        assertThat(hourlyTemperature, equalTo(20.3 + WeatherOperations.getDegreeSymbol() + "C"));
+        assertThat(hourlyTemperature, equalTo(WeatherDataStub.TEMPERATURE + WeatherOperations.getDegreeSymbol() + "C"));
 
     }
 
@@ -62,10 +62,10 @@ public class HourlyWeatherForecastDataTest {
     void shouldBeAbleToGetHourlyHumidity(int hourIndex) {
 
         //when
-        String hourlyHumidity= hourlyWeatherForecastData.getHourlyHumidity(hourIndex);
+        String hourlyHumidity = hourlyWeatherForecastData.getHourlyHumidity(hourIndex);
 
         //then
-        assertThat(hourlyHumidity, equalTo(93 + " %"));
+        assertThat(hourlyHumidity, equalTo(Math.round(WeatherDataStub.HUMIDITY) + " %"));
 
     }
 

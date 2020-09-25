@@ -102,12 +102,6 @@ public class ControllerFunctions {
         } catch (UnknownHostException ex) {
             cityName.setText("Brak połączenia z siecią.");
 
-        } catch (NoRouteToHostException exc) {
-            cityName.setText("Przerwano połączenie z siecią.");
-
-        } catch (SocketTimeoutException exce) {
-            cityName.setText("Serwer nie odpowiada.");
-
         } catch (IllegalArgumentException excep) {
             cityName.setText("Brak danych o podanym mieście.");
             System.out.println(excep.toString());

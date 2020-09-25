@@ -11,6 +11,9 @@ import java.util.List;
 
 public class WeatherDataStub {
 
+    public static final double HUMIDITY = 93.4;
+    public static final double TEMPERATURE = 20.3;
+
     public static CurrentWeather getCurrentWeather() {
 
         Weather weather = getWeather();
@@ -45,8 +48,8 @@ public class WeatherDataStub {
 
     private static Main getMainData() {
 
-        return new Main(20.3, 18.00, 23.00, 1009.00, 1020.00,
-                1019.00, 93.00,  10.00);
+        return new Main(TEMPERATURE, 18.00, 23.00, 1009.00, 1020.00,
+                1019.00, HUMIDITY,  10.00);
     }
 
     private static Coord getCoord() {

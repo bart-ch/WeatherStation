@@ -22,21 +22,17 @@ public class WeatherProvider {
         owm.setLanguage(OWM.Language.POLISH);
     }
 
-    public CurrentWeatherData getCurrentWeather(int cityId) throws APIException, UnknownHostException,
-            NoRouteToHostException, SocketTimeoutException {
+    public CurrentWeatherData getCurrentWeather(int cityId) throws APIException, UnknownHostException {
 
-        CurrentWeather currentWeatherQuery = owm.currentWeatherByCityId(cityId);
-        CurrentWeatherData currentWeather = new CurrentWeatherData(currentWeatherQuery);
+        CurrentWeatherData currentWeather = new CurrentWeatherData(owm.currentWeatherByCityId(cityId));
 
         return currentWeather;
 
     }
 
-    public HourlyWeatherForecastData getHourlyWeather(int cityId) throws APIException, UnknownHostException,
-            NoRouteToHostException, SocketTimeoutException {
+    public HourlyWeatherForecastData getHourlyWeather(int cityId) throws APIException, UnknownHostException {
 
-        HourlyWeatherForecast hourlyWeatherForecastQuery = owm.hourlyWeatherForecastByCityId(cityId);
-        HourlyWeatherForecastData hourlyWeather = new HourlyWeatherForecastData(hourlyWeatherForecastQuery);
+        HourlyWeatherForecastData hourlyWeather = new HourlyWeatherForecastData(owm.hourlyWeatherForecastByCityId(cityId));
 
         return hourlyWeather;
 

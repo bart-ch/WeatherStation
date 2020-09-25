@@ -14,4 +14,5 @@ public class WeatherOperations {
     public static Double roundTemperature(Double temp) {
         return Math.round(temp * 10.0) /10.0;
     }
+
 }

@@ -9,7 +9,7 @@ import java.text.ParseException;
  */
 public class ImagePathProvider {
 
-    public static String getBackgroundImagePath(DateTime dateTime, int conditionId) {
+    public static String getBackgroundImagePath(DateTime dateTime, int conditionId)  {
 
         String currentDateTime = dateTime.getCurrentTime();
         String sunriseDateTime = dateTime.getSunriseTime();

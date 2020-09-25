@@ -4,6 +4,7 @@ import net.aksingh.owmjapis.model.HourlyWeatherForecast;
 import net.aksingh.owmjapis.model.param.Weather;
 import net.aksingh.owmjapis.model.param.WeatherData;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -26,7 +27,7 @@ public class HourlyWeatherForecastData {
     }
 
     public List<WeatherData> getHourlyWeatherDataList() {
-        return (hourlyWeatherForecast.hasDataList()) ? hourlyWeatherForecast.getDataList() : null;
+        return (hourlyWeatherForecast.hasDataList()) ? hourlyWeatherForecast.getDataList() : Collections.emptyList();
     }
 
     private WeatherData getHourlyWeatherData(int hourIndex) {
@@ -37,7 +38,7 @@ public class HourlyWeatherForecastData {
         if (getHourlyWeatherData(hourIndex).hasDateTime()) {
             return getHourlyWeatherData(hourIndex).getDateTime().toString();
         }
-        return null;
+        return "";
     }
 
     public String getHourlyTemperature(int hourIndex) {
@@ -52,14 +53,14 @@ public class HourlyWeatherForecastData {
         if (getHourlyWeatherData(hourIndex).getMainData().hasHumidity()) {
             return Math.round(getHourlyWeatherData(hourIndex).getMainData().getHumidity()) + " %";
         }
-        return null;
+        return "";
     }
 
     private List<Weather> getHourlyWeatherList(int hourIndex) {
         if (getHourlyWeatherData(hourIndex).hasWeatherList()) {
             return getHourlyWeatherData(hourIndex).getWeatherList();
         }
-        return null;
+        return Collections.emptyList();
     }
 
     public String getHourlyWeatherIcon(int hourIndex) {
@@ -67,7 +68,7 @@ public class HourlyWeatherForecastData {
         if (hourlyWeatherData.hasIconLink()) {
             return hourlyWeatherData.getIconLink();
         }
-        return null;
+        return "";
     }
 
 }
