@@ -6,6 +6,12 @@ package weatherStation.model.date;
 public class DateConverter {
 
     public static String convertDateToPolish(String date) {
+
+        if (date.isEmpty()) {
+            return "Błąd podczas pobierania daty.";
+        }
+
+        date = date.trim();
         String dayName = date.substring(0,3);
         String convertedDayName = convertDateDayName(dayName);
         String monthName = date.substring(4,7);

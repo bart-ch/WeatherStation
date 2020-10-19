@@ -3,6 +3,7 @@ package weatherStation.model;
 import net.aksingh.owmjapis.model.CurrentWeather;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import weatherStation.model.weather.CurrentWeatherData;
 import weatherStation.model.weather.WeatherDataStub;
 import weatherStation.model.date.DateTime;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -20,7 +21,8 @@ public class ImagePathProviderTest {
 
         //given
         CurrentWeather currentWeather = WeatherDataStub.getCurrentWeather();
-        DateTime dateTime = new DateTime(currentWeather);
+        CurrentWeatherData currentWeatherData = new CurrentWeatherData(currentWeather);
+        DateTime dateTime = new DateTime(currentWeatherData);
 
         //when
         //then

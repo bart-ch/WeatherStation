@@ -5,7 +5,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
@@ -53,7 +52,7 @@ public class HourlyWeatherForecastDataTest {
         String hourlyTemperature = hourlyWeatherForecastData.getHourlyTemperature(hourIndex);
 
         //then
-        assertThat(hourlyTemperature, equalTo(20.3 + WeatherOperations.getDegreeSymbol() + "C"));
+        assertThat(hourlyTemperature, equalTo(WeatherDataStub.TEMPERATURE + WeatherOperations.getDegreeSymbol() + "C"));
 
     }
 
@@ -62,10 +61,10 @@ public class HourlyWeatherForecastDataTest {
     void shouldBeAbleToGetHourlyHumidity(int hourIndex) {
 
         //when
-        String hourlyHumidity= hourlyWeatherForecastData.getHourlyHumidity(hourIndex);
+        String hourlyHumidity = hourlyWeatherForecastData.getHourlyHumidity(hourIndex);
 
         //then
-        assertThat(hourlyHumidity, equalTo(93 + " %"));
+        assertThat(hourlyHumidity, equalTo(Math.round(WeatherDataStub.HUMIDITY) + " %"));
 
     }
 

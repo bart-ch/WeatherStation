@@ -23,8 +23,8 @@ public class ForecastHours {
                 return nextHours;
             }
         }
-        String[] nextHours = {};
-        return nextHours;
+
+        return new String[]{};
     }
 
     public List<Integer> getIndex(HourlyWeatherForecastData weather, String day) {
@@ -35,6 +35,10 @@ public class ForecastHours {
         for (int i = 0; i < weather.getHourlyWeatherDataList().size(); i++) {
             String dateToCheck = weather.getHourlyWeatherDataList().get(i).getDateTime().toString();
             String[] nextHours = getNextHours(weather);
+
+            if(nextHours.length == 0) {
+                return Collections.emptyList();
+            }
 
             String forecastHours = dateToCheck.substring(11, 13);
 

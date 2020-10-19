@@ -2,14 +2,12 @@ package weatherStation.model;
 
 import weatherStation.model.date.DateTime;
 
-import java.text.ParseException;
-
 /**
  * Created by "Bartosz Chodyla" on 2020-09-12.
  */
 public class ImagePathProvider {
 
-    public static String getBackgroundImagePath(DateTime dateTime, int conditionId) {
+    public static String getBackgroundImagePath(DateTime dateTime, int conditionId)  {
 
         String currentDateTime = dateTime.getCurrentTime();
         String sunriseDateTime = dateTime.getSunriseTime();

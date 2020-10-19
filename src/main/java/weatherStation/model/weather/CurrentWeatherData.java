@@ -4,6 +4,7 @@ import net.aksingh.owmjapis.model.CurrentWeather;
 import net.aksingh.owmjapis.model.param.Weather;
 import weatherStation.model.date.DateConverter;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -22,21 +23,21 @@ public class CurrentWeatherData {
             return WeatherOperations.roundTemperature(currentWeather.getMainData().getTemp()) + WeatherOperations.getDegreeSymbol() +
                     "C";
         }
-        return null;
+        return "";
     }
 
     public String getCurrentPressure() {
         if (currentWeather.getMainData().hasPressure()) {
             return Math.round(currentWeather.getMainData().getPressure()) + " hPa";
         }
-        return null;
+        return "";
     }
 
     public String getCurrentHumidity() {
         if (currentWeather.getMainData().hasHumidity()) {
             return Math.round(currentWeather.getMainData().getHumidity()) + " %";
         }
-        return null;
+        return "";
     }
 
     public String getCurrentDate() {
@@ -45,29 +46,55 @@ public class CurrentWeatherData {
             String polishCurrentDate = DateConverter.convertDateToPolish(currentDate);
             return polishCurrentDate;
         }
-        return null;
+        return "";
     }
 
     public String getCurrentWeatherIconLink() {
         Weather currentWeatherData = getCurrentWeatherList().get(0);
-        if (currentWeatherData.hasIconLink())
+        if (currentWeatherData.hasIconLink()) {
             return currentWeatherData.getIconLink();
-        else return null;
+        }
+        return "";
     }
 
     private List<Weather> getCurrentWeatherList() {
-        if (currentWeather.hasWeatherList())
+        if (currentWeather.hasWeatherList()) {
             return currentWeather.getWeatherList();
-        else return null;
+        }
+        return Collections.emptyList();
     }
 
     public int getCurrentCondition() {
         Weather currentWeatherData = getCurrentWeatherList().get(0);
-        return (currentWeatherData.hasConditionId()) ? currentWeatherData.getConditionId() : null;
+        return (currentWeatherData.hasConditionId()) ? currentWeatherData.getConditionId() : 0;
     }
 
-    public CurrentWeather getCurrentWeather() {
-        return currentWeather;
+    public String getCurrentDateTime() {
+        if (currentWeather.hasDateTime()) {
+            String currentDateTime = currentWeather.getDateTime().toString();
+            return currentDateTime;
+        } else {
+            return "";
+        }
+
+    }
+
+    public String getSunsetDateTime() {
+        if (currentWeather.getSystemData().hasSunsetDateTime()) {
+            String sunsetDateTime = currentWeather.getSystemData().getSunsetDateTime().toString();
+            return sunsetDateTime;
+        } else {
+            return "";
+        }
+    }
+
+    public String getSunriseDateTime() {
+        if (currentWeather.getSystemData().hasSunriseDateTime()) {
+            String sunriseDateTime = currentWeather.getSystemData().getSunriseDateTime().toString();
+            return sunriseDateTime;
+        } else {
+            return "";
+        }
     }
 
 }

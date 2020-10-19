@@ -10,7 +10,9 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import net.aksingh.owmjapis.api.APIException;
+import net.aksingh.owmjapis.core.OWM;
 import org.controlsfx.control.textfield.TextFields;
+import weatherStation.Config;
 import weatherStation.model.city.City;
 import weatherStation.model.city.CityProvider;
 import weatherStation.model.date.DateConverter;
@@ -18,9 +20,6 @@ import weatherStation.model.date.DateTime;
 import weatherStation.model.weather.CurrentWeatherData;
 import weatherStation.model.weather.HourlyWeatherForecastData;
 import weatherStation.model.weather.WeatherProvider;
-
-import java.net.NoRouteToHostException;
-import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.List;
@@ -70,7 +69,11 @@ public class ControllerFunctions {
             if (userCityId <= 0 || userCity.isEmpty()) {
                 throw new IllegalArgumentException();
             }
-            WeatherProvider weatherProvider = new WeatherProvider();
+            OWM owm = new OWM(new Config().getAPI_KEY());
+            owm.setUnit(OWM.Unit.METRIC);
+            owm.setLanguage(OWM.Language.POLISH);
+            WeatherProvider weatherProvider = new WeatherProvider(owm);
+
             CurrentWeatherData currentWeather = weatherProvider.getCurrentWeather(userCityId);
             HourlyWeatherForecastData hourlyWeatherForecast = weatherProvider.getHourlyWeather(userCityId);
 
@@ -102,12 +105,6 @@ public class ControllerFunctions {
         } catch (UnknownHostException ex) {
             cityName.setText("Brak połączenia z siecią.");
 
-        } catch (NoRouteToHostException exc) {
-            cityName.setText("Przerwano połączenie z siecią.");
-
-        } catch (SocketTimeoutException exce) {
-            cityName.setText("Serwer nie odpowiada.");
-
         } catch (IllegalArgumentException excep) {
             cityName.setText("Brak danych o podanym mieście.");
             System.out.println(excep.toString());
@@ -134,7 +131,7 @@ public class ControllerFunctions {
 
     private void setBackgroundImage(CurrentWeatherData weather, GridPane weatherBackground) {
 
-        DateTime dateTime = new DateTime(weather.getCurrentWeather());
+        DateTime dateTime = new DateTime(weather);
         String imageURL = ImagePathProvider.getBackgroundImagePath(dateTime, weather.getCurrentCondition());
 
         String imageExternalForm = ControllerFunctions.class.getResource(imageURL).toExternalForm();

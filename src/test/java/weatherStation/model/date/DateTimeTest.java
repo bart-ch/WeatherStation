@@ -3,6 +3,7 @@ package weatherStation.model.date;
 import net.aksingh.owmjapis.model.CurrentWeather;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import weatherStation.model.weather.CurrentWeatherData;
 import weatherStation.model.weather.WeatherDataStub;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -20,7 +21,8 @@ public class DateTimeTest {
     void setUp() {
 
         currentWeather = WeatherDataStub.getCurrentWeather();
-        dateTime = new DateTime(currentWeather);
+        CurrentWeatherData currentWeatherData = new CurrentWeatherData(currentWeather);
+        dateTime = new DateTime(currentWeatherData);
     }
 
     @Test
