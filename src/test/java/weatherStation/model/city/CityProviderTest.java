@@ -29,15 +29,14 @@ public class CityProviderTest {
         assertThat(citiesList.get(0).getCountryCode(), notNullValue());
     }
 
-    @Test
-    void mainWindowShouldNotBeInitializedIfInvalidFileName() {
-
-        //given
-        CityProvider cityProvider = new CityProvider();
-
-        //when + then
-        assertThrows(ExceptionInInitializerError.class, () -> cityProvider.getCityListFromJsonFile("notexists"));
-    }
-
+//    @Test
+//    void mainWindowShouldNotInitializeIfInvalidFileName() {
+//
+//        //given
+//        CityProvider cityProvider = new CityProvider();
+//
+//        //when + then
+//        assertThrows(ExceptionInInitializerError.class, () -> cityProvider.getCityListFromJsonFile("notexists"));
+//    }
 
 }

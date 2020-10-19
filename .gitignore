@@ -1,5 +1,4 @@
 out/
 target/
 src/main/java/weatherStation/STarterApp.java
-src/main/java/weatherStation/Config.java
 dependency-reduced-pom.xml

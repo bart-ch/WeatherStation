@@ -10,7 +10,9 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import net.aksingh.owmjapis.api.APIException;
+import net.aksingh.owmjapis.core.OWM;
 import org.controlsfx.control.textfield.TextFields;
+import weatherStation.Config;
 import weatherStation.model.city.City;
 import weatherStation.model.city.CityProvider;
 import weatherStation.model.date.DateConverter;
@@ -18,9 +20,6 @@ import weatherStation.model.date.DateTime;
 import weatherStation.model.weather.CurrentWeatherData;
 import weatherStation.model.weather.HourlyWeatherForecastData;
 import weatherStation.model.weather.WeatherProvider;
-
-import java.net.NoRouteToHostException;
-import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.List;
@@ -70,7 +69,10 @@ public class ControllerFunctions {
             if (userCityId <= 0 || userCity.isEmpty()) {
                 throw new IllegalArgumentException();
             }
-            WeatherProvider weatherProvider = new WeatherProvider();
+            OWM owm = new OWM(new Config().getAPI_KEY());
+            owm.setUnit(OWM.Unit.METRIC);
+            owm.setLanguage(OWM.Language.POLISH);
+            WeatherProvider weatherProvider = new WeatherProvider(owm);
 
             CurrentWeatherData currentWeather = weatherProvider.getCurrentWeather(userCityId);
             HourlyWeatherForecastData hourlyWeatherForecast = weatherProvider.getHourlyWeather(userCityId);

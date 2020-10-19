@@ -2,12 +2,7 @@ package weatherStation.model.weather;
 
 import net.aksingh.owmjapis.api.APIException;
 import net.aksingh.owmjapis.core.OWM;
-import net.aksingh.owmjapis.model.CurrentWeather;
-import net.aksingh.owmjapis.model.HourlyWeatherForecast;
-import weatherStation.Config;
 
-import java.net.NoRouteToHostException;
-import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 
 /**
@@ -15,11 +10,10 @@ import java.net.UnknownHostException;
  */
 public class WeatherProvider {
 
-    private OWM owm = new OWM(new Config().getAPI_KEY());
+    private OWM owm;
 
-    public WeatherProvider() {
-        owm.setUnit(OWM.Unit.METRIC);
-        owm.setLanguage(OWM.Language.POLISH);
+    public WeatherProvider(OWM owm) {
+        this.owm = owm;
     }
 
     public CurrentWeatherData getCurrentWeather(int cityId) throws APIException, UnknownHostException {

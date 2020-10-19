@@ -2,8 +2,6 @@ package weatherStation.model;
 
 import weatherStation.model.date.DateTime;
 
-import java.text.ParseException;
-
 /**
  * Created by "Bartosz Chodyla" on 2020-09-12.
  */
